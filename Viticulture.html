@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7B1B26">
+<title>Viticulture — Solitaire Campaign Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2E1B12;
+    --ink-soft:#6B513C;
+    --parchment:#F2E1BE;
+    --parchment-deep:#E7D0A4;
+    --card:#FBF3E0;
+    --wine:#7B1B26;
+    --wine-dark:#5A1019;
+    --gold:#C8891F;
+    --gold-light:#EFC663;
+    --vine:#5C7135;
+    --cellar:#5A2B53;
+    --winter:#3E6E8E;
+    --line:rgba(46,27,18,.22);
+    --line-soft:rgba(46,27,18,.12);
+    --shadow:0 2px 0 rgba(46,27,18,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(120% 60% at 50% 0%, #F7EAD0 0%, var(--parchment) 55%, var(--parchment-deep) 100%) fixed;
+    color:var(--ink);
+    font-family:"Alegreya Sans", "Trebuchet MS", system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.45;
+    -webkit-text-size-adjust:100%;
+  }
+  .sheet{max-width:480px;margin:0 auto;padding:0 14px 56px;}
+
+  /* ---------- masthead ---------- */
+  .masthead{text-align:center;padding:26px 0 10px;position:relative}
+  .masthead .grapes{display:block;margin:0 auto 2px;width:34px;height:34px}
+  h1{
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-weight:700;font-size:44px;line-height:.95;
+    color:var(--wine);margin:0;
+    letter-spacing:.02em;font-variant:small-caps;
+  }
+  .masthead .sub{
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-style:italic;font-size:18px;color:var(--ink-soft);margin:2px 0 12px;
+  }
+  .seasons{display:flex;height:5px;border-radius:3px;overflow:hidden;box-shadow:var(--shadow)}
+  .seasons i{flex:1}
+  .seasons i:nth-child(1){background:var(--vine)}
+  .seasons i:nth-child(2){background:var(--gold-light)}
+  .seasons i:nth-child(3){background:var(--cellar)}
+  .seasons i:nth-child(4){background:var(--winter)}
+
+  /* ---------- campaign switch ---------- */
+  .switch{display:flex;gap:8px;margin:16px 0 12px}
+  .switch button{
+    flex:1;padding:11px 6px;border:1px solid var(--line);border-radius:4px;
+    background:rgba(251,243,224,.6);color:var(--ink-soft);
+    font-family:"Cormorant Garamond",Georgia,serif;font-variant:small-caps;
+    font-size:19px;font-weight:600;letter-spacing:.03em;cursor:pointer;
+  }
+  .switch button[aria-pressed="true"]{
+    background:var(--wine);border-color:var(--wine-dark);color:#F7E8C8;
+    box-shadow:inset 0 0 0 1px rgba(239,198,99,.45);
+  }
+
+  /* ---------- generic card ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:5px;
+    box-shadow:var(--shadow);
+    padding:14px;
+    margin-bottom:14px;
+  }
+  h2{
+    font-family:"Cormorant Garamond",Georgia,serif;font-variant:small-caps;
+    font-size:22px;font-weight:600;letter-spacing:.03em;color:var(--wine);
+    margin:0 0 8px;
+  }
+  h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:21px;font-weight:600;margin:0;color:var(--ink)}
+  p{margin:0 0 8px}
+  .muted{color:var(--ink-soft);font-size:14px}
+
+  /* ---------- summary strip ---------- */
+  .summary{display:flex;gap:8px;margin-bottom:14px}
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:5px;
+    padding:8px 6px;text-align:center;box-shadow:var(--shadow);
+  }
+  .stat b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:28px;line-height:1.05;color:var(--wine)}
+  .stat span{font-size:12px;color:var(--ink-soft);font-variant:small-caps;letter-spacing:.04em}
+
+  /* ---------- current challenge ---------- */
+  .current{border-top:3px solid var(--wine)}
+  .chead{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+  .seal{
+    flex:0 0 52px;height:52px;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #9B2836, var(--wine) 60%, var(--wine-dark));
+    box-shadow:0 0 0 2px var(--gold-light), 0 1px 3px rgba(46,27,18,.35);
+    display:grid;place-items:center;color:#F7E8C8;
+    font-family:"Cormorant Garamond",Georgia,serif;font-size:28px;font-weight:700;
+  }
+  .seal.done{background:radial-gradient(circle at 34% 30%, #7C9450, var(--vine) 60%, #3F4F24)}
+  .chead .eyebrow{font-size:13px;color:var(--ink-soft);font-variant:small-caps;letter-spacing:.05em}
+  .rule{
+    background:rgba(231,208,164,.45);border-left:3px solid var(--gold);
+    padding:9px 11px;border-radius:0 4px 4px 0;font-size:15px;margin:10px 0 12px;
+  }
+  .flag{
+    font-size:14px;padding:8px 10px;border-radius:4px;margin:0 0 12px;
+    background:rgba(90,43,83,.10);border:1px dashed rgba(90,43,83,.4);color:var(--cellar);
+  }
+  .tokens{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:14px}
+  .chip{
+    display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff, #CFE3EC 70%, #9BB9C6);
+    border:1px solid rgba(62,110,142,.5);
+  }
+
+  /* ---------- year track ---------- */
+  .years{display:flex;gap:4px;margin:4px 0 10px}
+  .years button{
+    flex:1;padding:6px 0 5px;border:1px solid var(--line);border-radius:4px;
+    background:rgba(242,225,190,.5);cursor:pointer;font-family:inherit;line-height:1.1;
+  }
+  .years button[aria-pressed="true"]{background:var(--gold);border-color:#9A6A12;color:#2E1B12;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+  .years .y{display:block;font-size:15px;font-weight:700}
+  .years .t{display:block;font-size:10px;color:var(--ink-soft)}
+  .years button[aria-pressed="true"] .t{color:rgba(46,27,18,.75)}
+  .years button.miss{border-color:var(--wine);box-shadow:inset 0 -3px 0 rgba(123,27,38,.45)}
+  .years button.hit{border-color:var(--vine);box-shadow:inset 0 -3px 0 rgba(92,113,53,.5)}
+
+  .stepper{display:flex;align-items:center;gap:10px}
+  .stepper .label{flex:1;font-size:14px;color:var(--ink-soft)}
+  .stepper button{
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+    background:var(--parchment);font-size:20px;line-height:1;cursor:pointer;color:var(--ink);
+  }
+  .stepper .val{
+    min-width:52px;text-align:center;font-family:"Cormorant Garamond",Georgia,serif;
+    font-size:30px;font-weight:600;color:var(--wine)
+  }
+  .verdict{font-size:14px;margin:8px 0 0;padding:7px 10px;border-radius:4px}
+  .verdict.ahead{background:rgba(92,113,53,.14);color:#3F4F24}
+  .verdict.behind{background:rgba(123,27,38,.12);color:var(--wine)}
+
+  /* ---------- buttons ---------- */
+  .actions{display:flex;gap:8px;margin-top:14px}
+  .btn{
+    flex:1;padding:12px 8px;border-radius:4px;border:1px solid var(--line);
+    background:var(--parchment);color:var(--ink);cursor:pointer;
+    font-family:"Cormorant Garamond",Georgia,serif;font-variant:small-caps;
+    font-size:19px;font-weight:600;letter-spacing:.03em;
+  }
+  .btn.win{background:var(--vine);border-color:#3F4F24;color:#F4EFDC}
+  .btn.loss{background:var(--wine);border-color:var(--wine-dark);color:#F7E8C8}
+  .btn.ghost{font-size:15px;padding:9px 8px}
+  button:focus-visible,summary:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--winter);outline-offset:2px
+  }
+
+  /* ---------- ledger ---------- */
+  .row{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    padding:10px 4px;border:0;border-bottom:1px solid var(--line-soft);
+    background:none;cursor:pointer;font-family:inherit;font-size:15px;color:var(--ink);
+  }
+  .row:last-of-type{border-bottom:0}
+  .num{
+    flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid var(--line);font-size:13px;color:var(--ink-soft);background:rgba(242,225,190,.6)
+  }
+  .row.is-done .num{background:var(--vine);border-color:#3F4F24;color:#F4EFDC}
+  .row.is-current .num{background:var(--wine);border-color:var(--wine-dark);color:#F7E8C8}
+  .row .name{flex:1}
+  .row.is-done .name{color:var(--ink-soft)}
+  .row .games{font-size:13px;color:var(--ink-soft);white-space:nowrap}
+  .detail{padding:2px 4px 14px;font-size:14px;color:var(--ink-soft)}
+  .detail .rule{color:var(--ink)}
+  .tweaks{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .tweaks button{
+    padding:6px 10px;border:1px solid var(--line);border-radius:4px;background:var(--parchment);
+    font-family:inherit;font-size:13px;cursor:pointer;color:var(--ink)
+  }
+
+  /* ---------- panels ---------- */
+  details.panel{
+    background:var(--card);border:1px solid var(--line);border-radius:5px;
+    box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden
+  }
+  details.panel>summary{
+    list-style:none;cursor:pointer;padding:12px 14px;
+    font-family:"Cormorant Garamond",Georgia,serif;font-variant:small-caps;
+    font-size:20px;font-weight:600;color:var(--wine);letter-spacing:.03em;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  details.panel>summary::-webkit-details-marker{display:none}
+  details.panel>summary::after{content:"+";font-size:20px;color:var(--ink-soft)}
+  details.panel[open]>summary::after{content:"–"}
+  details.panel>div{padding:0 14px 14px}
+
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:13px;color:var(--ink-soft);font-variant:small-caps;letter-spacing:.04em;margin-bottom:4px}
+  select,textarea{
+    width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:4px;
+    background:var(--parchment);color:var(--ink);font-family:inherit;font-size:15px
+  }
+  textarea{font-size:12px;min-height:86px;resize:vertical}
+  .toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:15px}
+  .toggle input{width:20px;height:20px;accent-color:var(--wine)}
+  ul{margin:0 0 10px;padding-left:18px}
+  li{margin-bottom:5px;font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 10px}
+  th,td{border:1px solid var(--line-soft);padding:5px 3px;text-align:center}
+  th{background:rgba(231,208,164,.5);font-variant:small-caps;font-weight:600}
+
+  .undo{
+    display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:9px 12px;
+    background:rgba(90,43,83,.10);border:1px solid rgba(90,43,83,.35);
+    border-radius:5px;font-size:14px;color:var(--cellar);
+  }
+  .undo span{flex:1}
+  .undo button{
+    padding:7px 14px;border:1px solid var(--cellar);border-radius:4px;background:var(--cellar);
+    color:#F6ECDC;font-family:"Cormorant Garamond",Georgia,serif;font-variant:small-caps;
+    font-size:17px;font-weight:600;cursor:pointer;
+  }
+  .finalrow{margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft)}
+  .final{font-size:15px;margin:8px 0 0;padding:8px 10px;border-radius:4px;background:rgba(231,208,164,.5)}
+  .final.ahead{background:rgba(92,113,53,.14);color:#3F4F24}
+  .final.behind{background:rgba(123,27,38,.12);color:var(--wine)}
+
+  h4{font-family:"Cormorant Garamond",Georgia,serif;font-variant:small-caps;font-size:18px;
+     font-weight:600;color:var(--ink);margin:16px 0 6px;letter-spacing:.03em}
+  .bars{margin:4px 0 4px}
+  .bar{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:13px}
+  .bar .k{flex:0 0 52px;color:var(--ink-soft)}
+  .bar .t{flex:1;height:13px;background:rgba(46,27,18,.09);border-radius:2px;overflow:hidden}
+  .bar .f{display:block;height:100%;background:linear-gradient(90deg,var(--wine),#A6303C)}
+  .bar .f.green{background:linear-gradient(90deg,#4E6130,var(--vine))}
+  .bar .v{flex:0 0 52px;text-align:right;color:var(--ink)}
+
+  .entry{display:flex;align-items:baseline;gap:8px;padding:9px 2px;
+         border-bottom:1px solid var(--line-soft);font-size:14px;flex-wrap:wrap}
+  .entry .res{flex:0 0 42px;font-variant:small-caps;font-weight:700;font-size:15px}
+  .entry .res.w{color:var(--vine)}
+  .entry .res.l{color:var(--wine)}
+  .entry .meta{flex:1 0 100%;font-size:12px;color:var(--ink-soft);padding-left:50px}
+  .entry .del{margin-left:auto;border:0;background:none;color:var(--ink-soft);
+              font-size:20px;line-height:1;padding:0 6px;cursor:pointer}
+
+  .banner{
+    background:linear-gradient(180deg,#F7E8C8,#EFD9A8);border:1px solid var(--gold);
+    border-radius:5px;padding:14px;text-align:center;margin-bottom:14px
+  }
+  .banner b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:26px;color:var(--wine)}
+
+  footer{text-align:center;font-size:12px;color:var(--ink-soft);padding-top:6px}
+  #saveState{font-size:12px;color:var(--vine);min-height:16px;text-align:center;margin-bottom:6px}
+  @media (prefers-reduced-motion: no-preference){
+    #saveState{transition:opacity .4s}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <svg class="grapes" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M17 3c0 3-3 4-3 6" fill="none" stroke="#5C7135" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M17 4c3-1 5 0 6 2-2 1-4 1-6-2z" fill="#5C7135"/>
+      <g fill="#7B1B26">
+        <circle cx="14" cy="12" r="3.1"/><circle cx="20" cy="13" r="3.1"/><circle cx="11" cy="17" r="3.1"/>
+        <circle cx="17" cy="18" r="3.1"/><circle cx="23" cy="18" r="3.1"/><circle cx="14" cy="23" r="3.1"/>
+        <circle cx="20" cy="23" r="3.1"/><circle cx="17" cy="28" r="3.1"/>
+      </g>
+    </svg>
+    <h1>Viticulture</h1>
+    <p class="sub">Solitaire campaign log</p>
+    <div class="seasons"><i></i><i></i><i></i><i></i></div>
+  </header>
+
+  <nav class="switch" id="campaignSwitch" aria-label="Choose campaign">
+    <button type="button" data-campaign="viticulture" aria-pressed="true">Essential</button>
+    <button type="button" data-campaign="tuscany" aria-pressed="false">With Tuscany</button>
+  </nav>
+
+  <div id="summary" class="summary"></div>
+  <div id="current"></div>
+
+  <details class="panel" id="panelRules">
+    <summary>Difficulty and variant</summary>
+    <div id="settingsBody"></div>
+  </details>
+
+  <section class="card">
+    <h2>Challenge ledger</h2>
+    <p class="muted">Your campaign score is the number of games it takes to beat all eight. Lower is better.</p>
+    <div id="ledger"></div>
+  </section>
+
+  <details class="panel" id="panelStats">
+    <summary>Statistics</summary>
+    <div id="statsBody"></div>
+  </details>
+
+  <details class="panel" id="panelLog">
+    <summary>Game log</summary>
+    <div id="logBody"></div>
+  </details>
+
+  <details class="panel">
+    <summary>Solo setup reminders</summary>
+    <div id="setupBody"></div>
+  </details>
+
+  <details class="panel">
+    <summary>Saving and backup</summary>
+    <div>
+      <p class="muted" id="storageNote">Progress saves automatically on this device.</p>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="btnExport">Copy backup</button>
+        <button class="btn ghost" type="button" id="btnImport">Restore backup</button>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label for="backupBox">Backup data</label>
+        <textarea id="backupBox" spellcheck="false" placeholder="Paste a backup here, then tap Restore backup."></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="btnResetCampaign">Reset this campaign</button>
+      </div>
+    </div>
+  </details>
+
+  <div id="saveState" aria-live="polite"></div>
+  <footer>Companion sheet for Viticulture Essential Edition &amp; Tuscany Essential Edition by Stonemaier Games. Unofficial fan tool.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ game data ============ */
+
+  var CHALLENGES = [
+    { title:"Plant before you begin",
+      text:"You don't get a Mama card. Instead select any 3 vine cards and plant them as part of the setup. You may ignore the structure requirements of those 3 vines. Reshuffle the vine deck after you've made your choice." },
+    { title:"Two workers only",
+      text:"You can't have more than 2 workers (not counting the temporary worker or the grande). Use the middle action spaces instead of the leftmost ones, except when placing the grande on an already occupied action. You can't use bonus action tokens." },
+    { title:"Six workers by year 3",
+      text:"You must have 6 workers by the end of year 3 or you lose the game." },
+    { title:"Start at −5, harvest three",
+      text:"Start at −5 victory points. When you use the harvest action, you can harvest up to 3 fields." },
+    { title:"No tokens, eight years",
+      text:"You can't use bonus action tokens. Play 8 years, and each year you can choose any wake-up chart row you want." },
+    { title:"Score only from the cellar",
+      text:"You don't score VP during the game. Instead, at the end of the game you get 2 VP for each wine in your large cellar and 1 VP for each wine in your medium cellar." },
+    { title:"Start at −3 with residuals",
+      text:"Start at −3 victory points and £2 on the residual payment tracker." },
+    { title:"No wine orders",
+      text:"You can't fill wine orders, including filling orders via visitors. Wine can still be used to gain VP in all other ways. Mama cards that give you wine order cards can be redrawn." }
+  ];
+
+  var DIFFICULTIES = [
+    { id:"veryeasy", name:"Very easy", note:"Add an eighth year. In that year you may choose any wake-up row and you gain a bonus action token." },
+    { id:"easy",     name:"Easy",      note:"You start at 3 VP." },
+    { id:"normal",   name:"Normal",    note:"Play exactly as written in the Automa rules." },
+    { id:"hard",     name:"Hard",      note:"Keep drawing Automa cards until the Automa has placed at least 2 workers this season. Place workers on every spot listed on the extra cards, but skip actions that already hold a worker. The Automa stops at 6 workers. Reshuffle the deck if it runs out." },
+    { id:"veryhard", name:"Very hard", note:"Same as Hard, and the Automa starts at 23 VP." }
+  ];
+
+  // Aggressive variant: VP you must be ahead of at the end of each year.
+  var TARGETS = {
+    viticulture: { all:[-1,0,1,4,8,13,20] },
+    tuscany: {
+      easy:  [-1,-1,0,4,9,15,24],
+      normal:[-1,0,1,6,12,18,28],
+      hard:  [-1,0,1,6,13,22,32]
+    }
+  };
+
+  var CAMPAIGN_NAMES = { viticulture:"Viticulture Essential", tuscany:"Viticulture + Tuscany" };
+
+  /* ============ state ============ */
+
+  var KEY = "viticulture-campaign-v2";
+
+  function newChallenge(){ return { games:0, done:false, losses:0 }; }
+  function newCampaign(){
+    var list=[],i;
+    for(i=0;i<8;i++) list.push(newChallenge());
+    return { difficulty:"normal", aggressive:false, current:0, challenges:list, undo:null, log:[],
+             attempt:{ year:1, vps:[null,null,null,null,null,null,null,null], automa:null } };
+  }
+  function newState(){
+    return { active:"viticulture", open:-1,
+             campaigns:{ viticulture:newCampaign(), tuscany:newCampaign() } };
+  }
+
+  var state = newState();
+  function C(){ return state.campaigns[state.active]; }
+
+  /* ============ storage ============ */
+
+  var mode = "memory", memory = null;
+
+  function detectStorage(){
+    if (typeof window !== "undefined" && window.storage && typeof window.storage.get === "function"){
+      mode = "host"; return;
+    }
+    try {
+      window.localStorage.setItem(KEY+"-probe","1");
+      window.localStorage.removeItem(KEY+"-probe");
+      mode = "local";
+    } catch(e){ mode = "memory"; }
+  }
+
+  function load(){
+    if (mode === "host"){
+      return window.storage.get(KEY).then(function(r){
+        return r && r.value ? JSON.parse(r.value) : null;
+      }).catch(function(){ return null; });
+    }
+    if (mode === "local"){
+      try { var raw = window.localStorage.getItem(KEY); return Promise.resolve(raw?JSON.parse(raw):null); }
+      catch(e){ return Promise.resolve(null); }
+    }
+    return Promise.resolve(memory);
+  }
+
+  var saveTimer = null;
+  function save(){
+    flash("");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var json = JSON.stringify(state);
+      if (mode === "host"){
+        window.storage.set(KEY, json, false)
+          .then(function(){ flash("Saved"); })
+          .catch(function(){ flash("Couldn't save — copy a backup instead."); });
+      } else if (mode === "local"){
+        try { window.localStorage.setItem(KEY, json); flash("Saved"); }
+        catch(e){ flash("Couldn't save — copy a backup instead."); }
+      } else { memory = JSON.parse(json); flash("Saved for this session only"); }
+    }, 250);
+  }
+
+  var flashTimer=null;
+  function flash(msg){
+    var el = document.getElementById("saveState");
+    el.textContent = msg; el.style.opacity = msg?1:0;
+    clearTimeout(flashTimer);
+    if(msg) flashTimer = setTimeout(function(){ el.style.opacity=0; }, 1800);
+  }
+
+  /* ============ helpers ============ */
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  function yearsInGame(){
+    var c = C();
+    var n = 7;
+    if (c.current === 4) n = 8;            // challenge 5 always plays 8 years
+    if (c.difficulty === "veryeasy") n = 8; // very easy adds an eighth year
+    return n;
+  }
+
+  function targetFor(year){ // 1-based year, null when undefined
+    var c = C();
+    if (!c.aggressive) return null;
+    var table;
+    if (state.active === "viticulture") table = TARGETS.viticulture.all;
+    else {
+      var d = c.difficulty;
+      if (d === "veryeasy") d = "easy";
+      if (d === "veryhard") d = "hard";
+      table = TARGETS.tuscany[d] || TARGETS.tuscany.normal;
+    }
+    return (year >= 1 && year <= 7) ? table[year-1] : null;
+  }
+
+  function totals(){
+    var c = C(), games=0, done=0, i;
+    for(i=0;i<8;i++){ games += c.challenges[i].games; if(c.challenges[i].done) done++; }
+    return { games:games, done:done, complete: done === 8 };
+  }
+
+  function firstOpen(){
+    var c = C(), i;
+    for(i=0;i<8;i++) if(!c.challenges[i].done) return i;
+    return -1;
+  }
+
+  function difficultyName(id){
+    for (var i=0;i<DIFFICULTIES.length;i++) if(DIFFICULTIES[i].id===id) return DIFFICULTIES[i].name;
+    return id;
+  }
+
+  // last year you entered a score for is your final score
+  function finalVP(){
+    var v = C().attempt.vps, i;
+    for (i=v.length-1;i>=0;i--) if (v[i] !== null) return v[i];
+    return null;
+  }
+
+  function automaDefault(){
+    var c = C(), t;
+    if (c.aggressive){ t = targetFor(Math.min(yearsInGame(),7)); if (t !== null) return t; }
+    var base = (state.active === "tuscany") ? 25 : 20;
+    if (c.difficulty === "veryhard") base += 3;
+    return base;
+  }
+
+  function automaVP(){
+    var a = C().attempt.automa;
+    return (a === null || a === undefined) ? automaDefault() : a;
+  }
+
+  function stats(){
+    var log = C().log || [];
+    var s = { n:log.length, wins:0, vps:[], margins:[], byCh:[0,0,0,0,0,0,0,0],
+              yearSum:[0,0,0,0,0,0,0,0], yearN:[0,0,0,0,0,0,0,0], byDiff:{} };
+    for (var i=0;i<log.length;i++){
+      var g = log[i];
+      if (g.won) s.wins++;
+      if (typeof g.ch === "number" && g.ch >= 0 && g.ch < 8) s.byCh[g.ch]++;
+      if (g.vp !== null && g.vp !== undefined){
+        s.vps.push(g.vp);
+        if (g.automa !== null && g.automa !== undefined) s.margins.push(g.vp - g.automa);
+      }
+      if (g.vps) for (var y=0;y<8;y++) if (g.vps[y] !== null && g.vps[y] !== undefined){ s.yearSum[y]+=g.vps[y]; s.yearN[y]++; }
+      var d = g.diff || "normal";
+      if (!s.byDiff[d]) s.byDiff[d] = { n:0, wins:0 };
+      s.byDiff[d].n++; if (g.won) s.byDiff[d].wins++;
+    }
+    s.losses = s.n - s.wins;
+    s.best = s.vps.length ? Math.max.apply(null, s.vps) : null;
+    s.worst = s.vps.length ? Math.min.apply(null, s.vps) : null;
+    s.avg = s.vps.length ? s.vps.reduce(function(a,b){return a+b;},0) / s.vps.length : null;
+    s.avgMargin = s.margins.length ? s.margins.reduce(function(a,b){return a+b;},0) / s.margins.length : null;
+    return s;
+  }
+
+  function round1(x){ return (Math.round(x*10)/10).toString(); }
+
+  function dateLabel(ts){
+    try { return new Date(ts).toLocaleDateString(undefined,{day:"numeric",month:"short"}); }
+    catch(e){ return ""; }
+  }
+
+  /* ============ rendering ============ */
+
+  function render(){
+    renderSwitch();
+    renderSummary();
+    renderCurrent();
+    renderSettings();
+    renderLedger();
+    renderStats();
+    renderLog();
+    renderSetup();
+  }
+
+  function renderSwitch(){
+    var btns = document.querySelectorAll("#campaignSwitch button");
+    for (var i=0;i<btns.length;i++)
+      btns[i].setAttribute("aria-pressed", btns[i].dataset.campaign === state.active ? "true" : "false");
+  }
+
+  function renderSummary(){
+    var c = C(), t = totals(), idx = c.current;
+    var label = t.complete ? "done" : String(idx+1) + " of 8";
+    document.getElementById("summary").innerHTML =
+      '<div class="stat"><b>'+esc(label)+'</b><span>challenge</span></div>' +
+      '<div class="stat"><b>'+t.games+'</b><span>games played</span></div>' +
+      '<div class="stat"><b>'+t.done+'</b><span>beaten</span></div>';
+  }
+
+  function undoBar(){
+    var c = C();
+    if (!c.undo) return "";
+    return '<div class="undo"><span>'+esc(c.undo.label)+'</span>' +
+           '<button type="button" id="btnUndo">Undo</button></div>';
+  }
+
+  function renderCurrent(){
+    var host = document.getElementById("current");
+    var c = C(), t = totals();
+
+    if (t.complete){
+      host.innerHTML = undoBar() +
+        '<div class="banner"><b>Campaign complete</b>' +
+        '<p class="muted" style="margin:6px 0 0">You beat all eight challenges of the ' +
+        esc(CAMPAIGN_NAMES[state.active]) + ' campaign in ' + t.games + ' games.</p></div>' +
+        '<div class="card"><p class="muted">Reopen any challenge in the ledger below to keep playing, ' +
+        'or start over from the backup panel.</p></div>';
+      return;
+    }
+
+    var i = c.current, ch = c.challenges[i], a = c.attempt;
+    var attemptNo = ch.games + 1;
+    var nYears = yearsInGame(), y;
+
+    var html = undoBar() + '<section class="card current">';
+    html += '<div class="chead"><div class="seal">'+(i+1)+'</div><div>' +
+            '<div class="eyebrow">'+esc(CAMPAIGN_NAMES[state.active])+'</div>' +
+            '<div class="eyebrow">Challenge '+(i+1)+' · attempt '+attemptNo+'</div>' +
+            '<h3>'+esc(CHALLENGES[i].title)+'</h3></div></div>';
+    html += '<div class="rule">'+esc(CHALLENGES[i].text)+'</div>';
+
+    if (i === 5 && c.aggressive)
+      html += '<div class="flag">Playing the aggressive variant? Skip this challenge and move on.</div>';
+    if (i === 4 && c.difficulty === "veryeasy")
+      html += '<div class="flag">This challenge is already 8 years long, so Very easy adds nothing here.</div>';
+
+    // bonus action tokens carried in from losses
+    html += '<div class="tokens">';
+    if (ch.losses > 0 && i !== 1 && i !== 4){
+      for (y=0;y<ch.losses;y++) html += '<span class="chip" aria-hidden="true"></span>';
+      html += '<span>'+ch.losses+' bonus action token'+(ch.losses>1?'s':'')+' in hand from your losing streak.</span>';
+    } else if (ch.losses > 0){
+      html += '<span>Lost '+ch.losses+' in a row, but this challenge forbids bonus action tokens.</span>';
+    } else {
+      html += '<span class="muted">No bonus action tokens in hand. Lose, and you start the next attempt with one per consecutive loss.</span>';
+    }
+    html += '</div>';
+
+    // year track
+    html += '<div class="field" style="margin-bottom:6px"><label>Year</label></div><div class="years">';
+    for (y=1; y<=nYears; y++){
+      var tv = targetFor(y), mine = a.vps[y-1];
+      var cls = "";
+      if (c.aggressive && tv !== null && mine !== null) cls = (mine > tv) ? "hit" : "miss";
+      html += '<button type="button" data-year="'+y+'" aria-pressed="'+(a.year===y)+'" class="'+cls+'">' +
+              '<span class="y">'+y+'</span>' +
+              '<span class="t">'+(mine===null ? (c.aggressive && tv!==null ? "&gt;"+tv : "—") : mine)+'</span>' +
+              '</button>';
+    }
+    html += '</div>';
+
+    // VP stepper for the selected year
+    var cur = a.vps[a.year-1];
+    html += '<div class="stepper">' +
+            '<span class="label">Your VP at the end of year '+a.year+'</span>' +
+            '<button type="button" data-vp="-1" aria-label="Lose a point">−</button>' +
+            '<span class="val">'+(cur===null?"–":cur)+'</span>' +
+            '<button type="button" data-vp="1" aria-label="Gain a point">+</button></div>';
+
+    var tv2 = targetFor(a.year);
+    if (c.aggressive && tv2 !== null){
+      if (cur === null){
+        html += '<p class="verdict">Stay ahead of '+tv2+' VP at the end of year '+a.year+' or you lose immediately.</p>';
+      } else if (cur > tv2){
+        html += '<p class="verdict ahead">Ahead of the Automa by '+(cur-tv2)+'. Carry on to year '+(a.year+1<=nYears?a.year+1:a.year)+'.</p>';
+      } else {
+        html += '<p class="verdict behind">The Automa is on '+tv2+'. You need at least '+(tv2+1)+' VP to survive this year.</p>';
+      }
+    } else if (cur !== null && a.year === nYears){
+      html += '<p class="verdict">Final score: '+cur+' VP. Beat the Automa and the challenge is yours.</p>';
+    }
+
+    var fin = finalVP(), av = automaVP();
+    html += '<div class="finalrow">';
+    html += '<div class="stepper"><span class="label">Automa VP at the end of the game</span>' +
+            '<button type="button" data-am="-1" aria-label="Automa loses a point">−</button>' +
+            '<span class="val">'+av+'</span>' +
+            '<button type="button" data-am="1" aria-label="Automa gains a point">+</button></div>';
+    if (fin === null){
+      html += '<p class="muted" style="margin:6px 0 0">Your final score is whatever you enter for the last year you played. ' +
+              'It gets saved with the result.</p>';
+    } else {
+      html += '<p class="final '+(fin>av?"ahead":(fin===av?"":"behind"))+'">Final score ' + fin + ' to ' + av + ' — ' +
+              (fin>av ? "you win" : (fin===av ? "a draw" : "the Automa wins")) + '.</p>';
+    }
+    html += '</div>';
+
+    html += '<div class="actions">' +
+            '<button class="btn win" type="button" id="btnWin">Won</button>' +
+            '<button class="btn loss" type="button" id="btnLose">Lost</button></div>';
+    html += '<div class="actions"><button class="btn ghost" type="button" id="btnClearAttempt">Clear this attempt\'s scores</button></div>';
+    html += '</section>';
+
+    host.innerHTML = html;
+  }
+
+  function renderSettings(){
+    var c = C(), body = document.getElementById("settingsBody"), i, y;
+    var html = '<div class="field"><label for="difficulty">Difficulty</label><select id="difficulty">';
+    for (i=0;i<DIFFICULTIES.length;i++)
+      html += '<option value="'+DIFFICULTIES[i].id+'"'+(c.difficulty===DIFFICULTIES[i].id?" selected":"")+'>'+DIFFICULTIES[i].name+'</option>';
+    html += '</select></div>';
+    for (i=0;i<DIFFICULTIES.length;i++)
+      if (DIFFICULTIES[i].id === c.difficulty)
+        html += '<p class="muted">'+esc(DIFFICULTIES[i].note)+'</p>';
+
+    html += '<label class="toggle" style="margin:12px 0"><input type="checkbox" id="aggressive"'+(c.aggressive?" checked":"")+'>' +
+            '<span>Aggressive variant — the Automa scores every year and you lose the moment you fall behind.</span></label>';
+
+    if (c.aggressive){
+      var nY = yearsInGame();
+      html += '<table><thead><tr><th>Year</th>';
+      for (y=1;y<=nY;y++) html += '<th>'+y+'</th>';
+      html += '</tr></thead><tbody><tr><td>Automa VP</td>';
+      for (y=1;y<=nY;y++){ var tv = targetFor(y); html += '<td>'+(tv===null?"—":tv)+'</td>'; }
+      html += '</tr></tbody></table>';
+      if (c.difficulty === "veryeasy" || c.difficulty === "veryhard")
+        html += '<p class="muted">The aggressive variant is only defined for Easy, Normal and Hard. These numbers use the ' +
+                (c.difficulty==="veryeasy"?"Easy":"Hard") + ' row.</p>';
+      if (state.active === "tuscany")
+        html += '<p class="muted">Tuscany numbers assume all three expansion modules are in play.</p>';
+    }
+    body.innerHTML = html;
+  }
+
+  function renderLedger(){
+    var c = C(), host = document.getElementById("ledger"), html = "", i;
+    for (i=0;i<8;i++){
+      var ch = c.challenges[i];
+      var cls = "row" + (ch.done?" is-done":"") + (i===c.current && !ch.done ? " is-current":"");
+      var mark = ch.done ? "✓" : (i+1);
+      var games = ch.games === 0 ? "—" : ch.games + (ch.games===1?" game":" games");
+      html += '<button type="button" class="'+cls+'" data-open="'+i+'" aria-expanded="'+(state.open===i)+'">' +
+              '<span class="num">'+mark+'</span>' +
+              '<span class="name">'+esc(CHALLENGES[i].title)+'</span>' +
+              '<span class="games">'+games+'</span></button>';
+      if (state.open === i){
+        html += '<div class="detail"><div class="rule">'+esc(CHALLENGES[i].text)+'</div>' +
+                '<div class="tweaks">' +
+                '<button type="button" data-adj="-1" data-i="'+i+'">− game</button>' +
+                '<button type="button" data-adj="1" data-i="'+i+'">+ game</button>' +
+                (ch.done
+                  ? '<button type="button" data-reopen="'+i+'">Reopen</button>'
+                  : '<button type="button" data-play="'+i+'">Play this one</button>') +
+                '<button type="button" data-clear="'+i+'">Clear record</button>' +
+                '<span>'+ch.games+' played · '+ch.losses+' loss'+(ch.losses===1?"":"es")+' in a row</span>' +
+                '</div></div>';
+      }
+    }
+    var t = totals();
+    html += '<div class="row" style="border-top:2px solid var(--line);margin-top:6px;pointer-events:none">' +
+            '<span class="num">Σ</span><span class="name">Campaign score</span>' +
+            '<span class="games">'+t.games+' game'+(t.games===1?"":"s")+'</span></div>';
+    host.innerHTML = html;
+  }
+
+  function bar(key, value, max, green, suffix){
+    var pct = (max > 0) ? Math.max(2, Math.round((value / max) * 100)) : 2;
+    return '<div class="bar"><span class="k">'+esc(key)+'</span>' +
+           '<span class="t"><span class="f'+(green?" green":"")+'" style="width:'+pct+'%"></span></span>' +
+           '<span class="v">'+esc(value + (suffix||""))+'</span></div>';
+  }
+
+  function renderStats(){
+    var body = document.getElementById("statsBody"), s = stats(), c = C(), i, html = "";
+
+    if (s.n === 0){
+      body.innerHTML = '<p class="muted">No games recorded yet. Every time you tap Won or Lost, the final score of that ' +
+                       'game is stored here and the numbers below start filling in.</p>';
+      return;
+    }
+
+    var rate = Math.round((s.wins / s.n) * 100);
+    html += '<div class="summary" style="margin:2px 0 14px">' +
+            '<div class="stat"><b>'+s.n+'</b><span>games recorded</span></div>' +
+            '<div class="stat"><b>'+rate+'%</b><span>won</span></div>' +
+            '<div class="stat"><b>'+(s.avg===null?"—":round1(s.avg))+'</b><span>average VP</span></div>' +
+            '</div>';
+
+    html += '<p class="muted">'+s.wins+' won · '+s.losses+' lost' +
+            (s.best!==null ? ' · best score '+s.best+' · worst '+s.worst : '') +
+            (s.avgMargin!==null ? ' · average margin vs the Automa '+(s.avgMargin>=0?"+":"")+round1(s.avgMargin) : '') +
+            '.</p>';
+
+    // scores game by game, newest last
+    var log = c.log, shown = log.slice(-12), maxVP = 1;
+    for (i=0;i<shown.length;i++) if (shown[i].vp !== null && shown[i].vp > maxVP) maxVP = shown[i].vp;
+    html += '<h4>Final score, game by game</h4><div class="bars">';
+    for (i=0;i<shown.length;i++){
+      var g = shown[i];
+      html += bar("Ch " + (g.ch+1), (g.vp===null?0:g.vp), maxVP, g.won, g.vp===null?" —":" VP");
+    }
+    html += '</div>';
+    if (log.length > shown.length)
+      html += '<p class="muted">Showing your last '+shown.length+' games. The full list is in the game log.</p>';
+
+    // average VP by year
+    var maxYear = 1, anyYear = false;
+    for (i=0;i<8;i++) if (s.yearN[i]){ anyYear = true; var av = s.yearSum[i]/s.yearN[i]; if (av > maxYear) maxYear = av; }
+    if (anyYear){
+      html += '<h4>Average VP at the end of each year</h4><div class="bars">';
+      for (i=0;i<8;i++) if (s.yearN[i])
+        html += bar("Year "+(i+1), Number(round1(s.yearSum[i]/s.yearN[i])), maxYear, false, " VP");
+      html += '</div>';
+    }
+
+    // games per challenge
+    var maxCh = 1;
+    for (i=0;i<8;i++) if (s.byCh[i] > maxCh) maxCh = s.byCh[i];
+    html += '<h4>Games per challenge</h4><div class="bars">';
+    for (i=0;i<8;i++)
+      html += bar("Ch " + (i+1), s.byCh[i], maxCh, c.challenges[i].done, "");
+    html += '</div>';
+
+    // by difficulty
+    var keys = [], k;
+    for (k in s.byDiff) if (s.byDiff.hasOwnProperty(k)) keys.push(k);
+    if (keys.length){
+      html += '<h4>By difficulty</h4><table><thead><tr><th>Level</th><th>Games</th><th>Won</th></tr></thead><tbody>';
+      for (i=0;i<keys.length;i++)
+        html += '<tr><td>'+esc(difficultyName(keys[i]))+'</td><td>'+s.byDiff[keys[i]].n+'</td><td>'+s.byDiff[keys[i]].wins+'</td></tr>';
+      html += '</tbody></table>';
+    }
+
+    body.innerHTML = html;
+  }
+
+  function renderLog(){
+    var body = document.getElementById("logBody"), c = C(), log = c.log, html = "", i;
+    if (!log.length){
+      body.innerHTML = '<p class="muted">Nothing logged yet.</p>';
+      return;
+    }
+    html += '<p class="muted">Newest first. Removing an entry also takes that game off the challenge ledger.</p>';
+    for (i = log.length - 1; i >= 0; i--){
+      var g = log[i];
+      var score = (g.vp === null || g.vp === undefined) ? "no score entered"
+                : g.vp + " to " + (g.automa === null || g.automa === undefined ? "?" : g.automa);
+      html += '<div class="entry">' +
+              '<span class="res '+(g.won?"w":"l")+'">'+(g.won?"Won":"Lost")+'</span>' +
+              '<span>Ch '+(g.ch+1)+' · '+esc(score)+'</span>' +
+              '<span class="meta">'+esc(difficultyName(g.diff||"normal"))+(g.agg?" · aggressive":"")+' · '+esc(dateLabel(g.ts))+'</span>' +
+              '<button type="button" class="del" data-del="'+i+'" aria-label="Remove this game">×</button>' +
+              '</div>';
+    }
+    body.innerHTML = html;
+  }
+
+  function renderSetup(){    var body = document.getElementById("setupBody");
+    var common =
+      '<ul>' +
+      '<li>Set up your vineyard as usual and play on the 2-player (leftmost) action spaces.</li>' +
+      '<li>Put 1 glass token on every row of the wake-up chart. Taking a row hands you that token as a bonus action token.</li>' +
+      '<li>Shuffle the Automa deck next to the wake-up chart. Draw 1 card at the start of each worker-placement season.</li>' +
+      '<li>Automa workers only block spaces — they never take actions or bonuses.</li>' +
+      '<li>Remove visitor cards that only pay off when another player acts, or redraw them when they come up.</li>' +
+      '</ul>';
+    var extra;
+    if (state.active === "viticulture"){
+      extra = '<p class="muted">The Automa VP marker starts on the End space (20 VP). The game runs 7 years, and you win by ' +
+              'finishing ahead of the Automa. Level ties count as a draw.</p>';
+    } else {
+      extra = '<ul>' +
+              '<li>Use the extended board and place the Automa VP marker on 25 instead of 20.</li>' +
+              '<li>Put 1 Automa influence star on each region worth 1 VP and 2 on each region worth 2 VP. You will need a second colour.</li>' +
+              '<li>Remove the Chef, Innkeeper, Merchant and Soldato special workers. With the promo cards, also remove Apprentice, Martyr and Storyteller.</li>' +
+              '<li>If the Automa has one worker left at the start of winter, place it on the topmost winter action shown on the card.</li>' +
+              '<li>Both you and the Automa score the influence map at the end.</li>' +
+              '</ul>';
+    }
+    body.innerHTML = extra + common;
+  }
+
+  /* ============ actions ============ */
+
+  function resetAttempt(){
+    C().attempt = { year:1, vps:[null,null,null,null,null,null,null,null], automa:null };
+  }
+
+  // one-step undo, kept per campaign so switching tabs never loses it
+  function snapshot(label){
+    var c = C();
+    c.undo = { label:label, data: JSON.stringify({ challenges:c.challenges, current:c.current, attempt:c.attempt, log:c.log }) };
+  }
+
+  function undoLast(){
+    var c = C(); if (!c.undo) return;
+    var d = JSON.parse(c.undo.data);
+    c.challenges = d.challenges; c.current = d.current; c.attempt = d.attempt;
+    if (d.log) c.log = d.log;
+    c.undo = null;
+    state.open = -1; render(); save(); flash("Undone");
+  }
+
+
+  function finishGame(won){
+    var c = C(), ch = c.challenges[c.current];
+    snapshot((won ? "Win" : "Loss") + " recorded on challenge " + (c.current+1) + ".");
+    c.log.push({
+      ts: Date.now(), ch: c.current, won: won,
+      vp: finalVP(), automa: automaVP(),
+      diff: c.difficulty, agg: c.aggressive,
+      vps: c.attempt.vps.slice()
+    });
+    ch.games++;
+    if (won){ ch.done = true; ch.losses = 0; }
+    else { ch.losses++; }
+    resetAttempt();
+    var next = firstOpen();
+    if (next !== -1) c.current = next;
+    state.open = -1;
+    render(); save();
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  document.getElementById("campaignSwitch").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-campaign]"); if(!b) return;
+    state.active = b.dataset.campaign; state.open = -1;
+    render(); save();
+  });
+
+  document.getElementById("current").addEventListener("click", function(e){
+    var c = C(), a = c.attempt, el;
+    if ((el = e.target.closest("button[data-year]"))){
+      a.year = parseInt(el.dataset.year,10); renderCurrent(); save(); return;
+    }
+    if ((el = e.target.closest("button[data-vp]"))){
+      var d = parseInt(el.dataset.vp,10);
+      var cur = a.vps[a.year-1];
+      cur = (cur === null) ? (d>0?1:-1) : cur + d;
+      if (cur > 60) cur = 60; if (cur < -15) cur = -15;
+      a.vps[a.year-1] = cur;
+      renderCurrent(); save(); return;
+    }
+    if ((el = e.target.closest("button[data-am]"))){
+      var av = automaVP() + parseInt(el.dataset.am,10);
+      if (av > 60) av = 60; if (av < -15) av = -15;
+      a.automa = av; renderCurrent(); save(); return;
+    }
+    if (e.target.id === "btnUndo"){ undoLast(); return; }
+    if (e.target.id === "btnWin"){ finishGame(true); return; }
+    if (e.target.id === "btnLose"){ finishGame(false); return; }
+    if (e.target.id === "btnClearAttempt"){ resetAttempt(); renderCurrent(); save(); return; }
+  });
+
+  document.getElementById("settingsBody").addEventListener("change", function(e){
+    var c = C();
+    if (e.target.id === "difficulty"){ c.difficulty = e.target.value; }
+    if (e.target.id === "aggressive"){ c.aggressive = e.target.checked; }
+    renderSettings(); renderCurrent(); save();
+  });
+
+  document.getElementById("ledger").addEventListener("click", function(e){
+    var c = C(), el;
+    if ((el = e.target.closest("button[data-adj]"))){
+      var i = parseInt(el.dataset.i,10), d = parseInt(el.dataset.adj,10);
+      snapshot("Game count changed on challenge " + (i+1) + ".");
+      c.challenges[i].games = Math.max(0, c.challenges[i].games + d);
+      if (d < 0) c.challenges[i].losses = Math.max(0, c.challenges[i].losses - 1);
+      renderLedger(); renderSummary(); renderCurrent(); renderStats(); save(); return;
+    }
+    if ((el = e.target.closest("button[data-clear]"))){
+      var k = parseInt(el.dataset.clear,10);
+      snapshot("Challenge " + (k+1) + " record cleared.");
+      c.challenges[k] = newChallenge();
+      if (c.current === k) resetAttempt();
+      var open = firstOpen(); if (open !== -1) c.current = open;
+      renderLedger(); renderSummary(); renderCurrent(); renderStats(); save(); return;
+    }
+    if ((el = e.target.closest("button[data-reopen]"))){
+      var r = parseInt(el.dataset.reopen,10);
+      snapshot("Challenge " + (r+1) + " reopened.");
+      c.challenges[r].done = false; c.current = r; resetAttempt();
+      state.open = -1; render(); save();
+      window.scrollTo({ top:0, behavior:"smooth" }); return;
+    }
+    if ((el = e.target.closest("button[data-play]"))){
+      var p = parseInt(el.dataset.play,10);
+      c.current = p; resetAttempt(); state.open = -1; render(); save();
+      window.scrollTo({ top:0, behavior:"smooth" }); return;
+    }
+    if ((el = e.target.closest("button[data-open]"))){
+      var o = parseInt(el.dataset.open,10);
+      state.open = (state.open === o) ? -1 : o;
+      renderLedger(); save(); return;
+    }
+  });
+
+  document.getElementById("logBody").addEventListener("click", function(e){
+    var el = e.target.closest("button[data-del]"); if (!el) return;
+    var c = C(), i = parseInt(el.dataset.del,10), g = c.log[i];
+    if (!g) return;
+    snapshot("Game removed from the log.");
+    c.log.splice(i,1);
+    var ch = c.challenges[g.ch];
+    if (ch){
+      ch.games = Math.max(0, ch.games - 1);
+      if (!g.won) ch.losses = Math.max(0, ch.losses - 1);
+      else {
+        var stillWon = false, j;
+        for (j=0;j<c.log.length;j++) if (c.log[j].ch === g.ch && c.log[j].won) stillWon = true;
+        if (!stillWon) ch.done = false;
+      }
+    }
+    var open = firstOpen(); if (open !== -1) c.current = open;
+    render(); save(); flash("Game removed");
+  });
+
+  document.getElementById("btnExport").addEventListener("click", function(){
+    var box = document.getElementById("backupBox");
+    box.value = JSON.stringify(state);
+    box.select();
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(box.value).then(function(){ flash("Backup copied"); },
+                                                    function(){ flash("Backup ready — copy it from the box"); });
+    } else flash("Backup ready — copy it from the box");
+  });
+
+  document.getElementById("btnImport").addEventListener("click", function(){
+    var box = document.getElementById("backupBox");
+    if (!box.value.trim()){ flash("Paste a backup into the box first"); return; }
+    try {
+      var data = JSON.parse(box.value);
+      if (!data || !data.campaigns || !data.campaigns.viticulture) throw new Error("shape");
+      state = data;
+      if (typeof state.open !== "number") state.open = -1;
+      render(); save(); flash("Backup restored");
+    } catch(err){ flash("That backup couldn't be read. Check the text and try again."); }
+  });
+
+  document.getElementById("btnResetCampaign").addEventListener("click", function(){
+    if (!window.confirm("Clear all progress for the " + CAMPAIGN_NAMES[state.active] + " campaign?")) return;
+    state.campaigns[state.active] = newCampaign();
+    state.open = -1; render(); save(); flash("Campaign reset");
+  });
+
+  /* ============ boot ============ */
+
+  detectStorage();
+  var note = document.getElementById("storageNote");
+  if (mode === "memory")
+    note.textContent = "This device is blocking storage, so progress lasts only while this page is open. Copy a backup before you close it.";
+  else if (mode === "local")
+    note.textContent = "Progress saves automatically in this browser. Copy a backup before clearing site data.";
+
+  load().then(function(saved){
+    if (saved && saved.campaigns && saved.campaigns.viticulture){
+      state = saved;
+      if (typeof state.open !== "number") state.open = -1;
+      if (!state.campaigns.tuscany) state.campaigns.tuscany = newCampaign();
+      var ks = ["viticulture","tuscany"], i;
+      for (i=0;i<ks.length;i++){
+        var c = state.campaigns[ks[i]];
+        if (!c.attempt || !c.attempt.vps) c.attempt = { year:1, vps:[null,null,null,null,null,null,null,null], automa:null };
+        if (typeof c.attempt.automa === "undefined") c.attempt.automa = null;
+        if (!Array.isArray(c.log)) c.log = [];
+        if (typeof c.undo === "undefined") c.undo = null;
+      }
+    }
+    render();
+  });
+})();
+</script>
+</body>
+</html>
