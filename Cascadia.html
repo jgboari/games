@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#46301F">
+<title>Conquistas de Cascadia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,500;0,700;0,800;1,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bark:#46301F;
+  --bark-2:#5C4029;
+  --bark-3:#6E5138;
+  --parchment:#F2ECDC;
+  --parchment-2:#E8DFC9;
+  --pine:#1E6046;
+  --pine-dk:#154434;
+  --moss:#7CA24E;
+  --river:#3E8FB0;
+  --prairie:#E0A62B;
+  --ink:#2B1D12;
+  --ink-soft:#6B5744;
+
+  --bear:#6E4A2E;
+  --elk:#C9A85C;
+  --salmon:#DE3C7C;
+  --hawk:#5BAEDC;
+  --fox:#E88428;
+
+  --hab-river:#4FA3C7;
+  --hab-wet:#8DBE4A;
+  --hab-forest:#2F6B3F;
+  --hab-mtn:#AFC4D2;
+  --hab-prairie:#E8B93C;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bark);
+  color:var(--ink);
+  font-family:Karla,"Helvetica Neue",Arial,sans-serif;
+  font-size:15px;line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{
+  max-width:480px;margin:0 auto;min-height:100vh;
+  background:var(--parchment);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(124,162,78,.10), transparent 45%),
+    radial-gradient(circle at 88% 68%, rgba(224,166,43,.12), transparent 42%);
+  box-shadow:0 0 0 1px rgba(0,0,0,.25);
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+
+/* ---------- placa de madeira ---------- */
+.sign{
+  background:linear-gradient(178deg,var(--bark-3),var(--bark-2) 40%,var(--bark));
+  color:#F6EFDF;border-radius:8px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -3px 0 rgba(0,0,0,.28), 0 2px 5px rgba(0,0,0,.22);
+  position:relative;
+}
+.sign::after{
+  content:"";position:absolute;inset:4px;border-radius:5px;
+  border:1px solid rgba(246,239,223,.16);pointer-events:none;
+}
+
+/* ---------- topo ---------- */
+header{
+  padding:18px 16px 14px;
+  background:
+    linear-gradient(180deg,#2E5E3E 0%, #35704A 46%, #6E9A4C 74%, #C9A94B 100%);
+  border-bottom:3px solid var(--bark);
+  position:relative;overflow:hidden;
+}
+header .ridge{position:absolute;left:0;right:0;bottom:0;height:34px;opacity:.55}
+h1{
+  font-family:Bitter,Georgia,serif;font-weight:800;
+  font-size:23px;line-height:1.08;letter-spacing:.01em;
+  margin:0;padding:11px 14px 13px;text-align:center;
+  position:relative;z-index:2;
+}
+h1 small{display:block;font-size:11.5px;font-weight:500;letter-spacing:.22em;
+  color:#D9C9A6;margin-top:5px;font-family:Karla,sans-serif}
+
+/* ---------- painel dos jogadores ---------- */
+.players{padding:14px 12px 4px}
+.pcard{
+  background:rgba(255,255,255,.5);
+  border:1px solid rgba(70,48,31,.18);
+  border-left:5px solid var(--tok,#9A7549);
+  border-radius:10px;padding:9px 11px 7px;margin-bottom:9px;
+}
+.prow{display:flex;align-items:center;gap:9px}
+.tokbtn{
+  flex:0 0 auto;width:36px;height:36px;border-radius:9px;border:1px solid rgba(70,48,31,.28);
+  background:var(--parchment-2);display:grid;place-items:center;cursor:pointer;padding:0;
+}
+.tokbtn:active{transform:scale(.94)}
+.pname{
+  flex:1 1 auto;min-width:0;border:0;background:transparent;
+  font-family:Bitter,Georgia,serif;font-weight:700;font-size:17px;color:var(--ink);
+  padding:3px 2px;border-bottom:1px dashed rgba(70,48,31,.3);
+}
+.pname:focus{outline:none;border-bottom-color:var(--pine)}
+.pscore{flex:0 0 auto;text-align:right;line-height:1.05}
+.pscore b{font-family:Bitter,Georgia,serif;font-size:20px;color:var(--pine-dk)}
+.pscore span{font-size:10.5px;color:var(--ink-soft);display:block}
+.prank{
+  margin-top:6px;font-size:11.5px;color:var(--ink-soft);
+  display:flex;justify-content:space-between;gap:8px;align-items:baseline;
+}
+.prank b{font-family:Bitter,serif;color:var(--bark);font-weight:700;font-size:12.5px}
+.trail{display:block;width:100%;height:auto;margin-top:5px}
+
+/* ---------- abas ---------- */
+nav{
+  display:flex;gap:5px;padding:6px 12px 0;
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg,var(--parchment) 72%,rgba(242,236,220,0));
+  padding-bottom:9px;
+}
+.tab{
+  flex:1;border:0;cursor:pointer;padding:9px 4px 10px;border-radius:8px 8px 3px 3px;
+  font-family:Bitter,Georgia,serif;font-weight:700;font-size:12.5px;
+  background:var(--parchment-2);color:var(--bark-2);
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.12);
+}
+.tab small{display:block;font-family:Karla,sans-serif;font-weight:500;font-size:10px;opacity:.7;margin-top:2px}
+.tab[aria-selected="true"]{
+  background:linear-gradient(178deg,var(--bark-3),var(--bark-2));color:#F6EFDF;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -3px 0 rgba(0,0,0,.3);
+}
+.tab[aria-selected="true"] small{color:#D9C9A6;opacity:1}
+
+/* ---------- corpo ---------- */
+main{padding:2px 12px 0}
+.howto{
+  font-size:12.5px;color:#EFE6D2;background:var(--pine-dk);
+  border-radius:9px;padding:9px 12px;margin:2px 0 11px;line-height:1.4;
+}
+.howto b{color:#F6D98A}
+.toolbar{display:flex;align-items:center;gap:8px;margin:0 2px 10px;font-size:12.5px;color:var(--ink-soft)}
+.toolbar label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.toolbar input{accent-color:var(--pine);width:16px;height:16px}
+.count{margin-left:auto;font-family:Bitter,serif;font-size:12px;color:var(--bark-2)}
+
+.item{
+  background:#FBF7EC;border:1px solid rgba(70,48,31,.16);
+  border-radius:11px;margin-bottom:9px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(70,48,31,.07);
+}
+.item.done{background:#F1F3E4;border-color:rgba(30,96,70,.3)}
+.ihead{display:flex;align-items:center;gap:8px;padding:8px 10px 6px}
+.num{
+  flex:0 0 auto;font-family:Bitter,Georgia,serif;font-weight:800;font-size:15px;
+  color:#F6EFDF;background:var(--bark-2);
+  width:30px;height:26px;display:grid;place-items:center;border-radius:5px;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.25);
+}
+.goal{
+  flex:0 0 auto;background:var(--pine);color:#fff;border-radius:999px;
+  font-family:Bitter,serif;font-weight:700;font-size:13px;padding:3px 11px;
+  border:2px dotted rgba(255,255,255,.55);
+}
+.itext{padding:0 11px 9px;font-size:14px;color:var(--ink)}
+.ihead + .itext{padding-top:2px}
+
+.cards{display:flex;gap:4px;padding:2px 10px 8px;flex-wrap:wrap}
+.sc{
+  display:flex;align-items:center;gap:4px;background:var(--bark-2);
+  border-radius:5px;padding:2px 6px 2px 3px;
+}
+.sc i{width:15px;height:15px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.sc b{font-family:Bitter,serif;font-size:12px;color:#F6EFDF;font-weight:700}
+
+.objs{list-style:none;margin:0;padding:0 11px 8px}
+.objs li{
+  position:relative;padding:3px 0 3px 20px;font-size:13.5px;line-height:1.35;color:#3E2C1C;
+}
+.objs li::before{
+  content:"";position:absolute;left:0;top:8px;width:11px;height:12px;
+  background:var(--pine);opacity:.85;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+}
+
+.marks{display:flex;gap:7px;padding:0 10px 10px}
+.mark{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  border:1.5px solid rgba(70,48,31,.28);background:transparent;color:var(--ink-soft);
+  border-radius:8px;padding:8px 6px;cursor:pointer;
+  font-family:Karla,sans-serif;font-weight:700;font-size:13px;
+  min-height:42px;overflow:hidden;
+}
+.mark span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.mark svg{flex:0 0 auto;opacity:.4}
+.mark[aria-pressed="true"]{
+  background:var(--tok);border-color:rgba(70,48,31,.55);color:#2B1D12;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.18);
+}
+.mark[aria-pressed="true"] svg{opacity:1}
+.mark:active{transform:scale(.985)}
+.mark:focus-visible,.tab:focus-visible,.tokbtn:focus-visible,button:focus-visible{
+  outline:2.5px solid var(--pine);outline-offset:2px}
+
+.empty{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:26px 10px 34px;font-style:italic}
+
+/* ---------- rodapé ---------- */
+footer{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  background:var(--bark);border-top:2px solid #2E1F14;
+  padding:9px 12px calc(9px + env(safe-area-inset-bottom));
+}
+.fbar{max-width:480px;margin:0 auto;display:flex;gap:7px}
+.fbtn{
+  flex:1;border:1px solid rgba(246,239,223,.28);background:rgba(246,239,223,.07);
+  color:#EFE6D2;border-radius:7px;padding:9px 4px;font-size:12px;font-weight:700;
+  font-family:Karla,sans-serif;cursor:pointer;
+}
+.fbtn:active{background:rgba(246,239,223,.18)}
+.fbtn.danger{color:#F0B9A6;border-color:rgba(240,185,166,.35)}
+.saved{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:40;
+  background:var(--pine-dk);color:#F3EAD3;font-size:12.5px;padding:7px 15px;border-radius:999px;
+  opacity:0;transition:opacity .25s;pointer-events:none;
+  box-shadow:0 3px 12px rgba(0,0,0,.3);
+}
+.saved.on{opacity:1}
+
+/* ---------- seletor de trilha ---------- */
+.sheet{
+  position:fixed;inset:0;z-index:50;background:rgba(30,20,12,.55);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.sheet.on{display:flex}
+.sheet .box{
+  width:100%;max-width:480px;background:var(--parchment);
+  border-radius:16px 16px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));
+}
+.sheet h2{font-family:Bitter,serif;font-size:16px;margin:0 0 3px}
+.sheet p{margin:0 0 13px;font-size:12.5px;color:var(--ink-soft)}
+.toks{display:flex;gap:8px}
+.toks button{
+  flex:1;aspect-ratio:1;border-radius:11px;border:2px solid rgba(70,48,31,.22);
+  background:#FBF7EC;display:grid;place-items:center;cursor:pointer;
+}
+.toks button[aria-pressed="true"]{border-color:var(--pine);box-shadow:0 0 0 3px rgba(30,96,70,.18)}
+.toks button:disabled{opacity:.32;cursor:not-allowed}
+.sheet .close{
+  width:100%;margin-top:14px;border:0;background:var(--bark-2);color:#F6EFDF;
+  border-radius:9px;padding:11px;font-family:Bitter,serif;font-weight:700;font-size:14px;cursor:pointer;
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <svg class="ridge" viewBox="0 0 480 34" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 34 L52 12 L86 22 L128 4 L172 24 L214 10 L262 26 L306 8 L352 22 L398 11 L440 24 L480 14 L480 34 Z" fill="#1F3E2C" opacity=".65"/>
+    <path d="M0 34 L40 22 L92 30 L140 18 L190 30 L244 20 L300 31 L358 21 L410 30 L480 22 L480 34 Z" fill="#16301F" opacity=".7"/>
+  </svg>
+  <div class="sign"><h1>Conquistas de Cascadia<small>REGISTRO DE DOIS BIÓLOGOS</small></h1></div>
+</header>
+
+<section class="players" id="players"></section>
+
+<nav role="tablist" aria-label="Modos de conquista">
+  <button class="tab" role="tab" id="tab-cen" aria-selected="true"  data-mode="cen">Cenários<small>15 desafios</small></button>
+  <button class="tab" role="tab" id="tab-nor" aria-selected="false" data-mode="nor">Partida normal<small>25 metas</small></button>
+  <button class="tab" role="tab" id="tab-res" aria-selected="false" data-mode="res">Restrições<small>10 regras</small></button>
+</nav>
+
+<main>
+  <div class="howto" id="howto"></div>
+  <div class="toolbar">
+    <label><input type="checkbox" id="pending"> Só o que falta</label>
+    <span class="count" id="count"></span>
+  </div>
+  <div id="list"></div>
+</main>
+
+<footer>
+  <div class="fbar">
+    <button class="fbtn" id="exp">Exportar</button>
+    <button class="fbtn" id="imp">Importar</button>
+    <button class="fbtn danger" id="rst">Zerar tudo</button>
+  </div>
+</footer>
+<div class="saved" id="saved">Progresso salvo</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="box">
+    <h2 id="sheetTitle">Escolha a trilha</h2>
+    <p>Cada biólogo caminha por uma trilha de cor própria, igual à do livro de regras.</p>
+    <div class="toks" id="toks"></div>
+    <button class="close" id="sheetClose">Pronto</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ============================================================
+   Dados do livro de regras (Cascadia — Conquistas, p. 12–14)
+   ============================================================ */
+
+const SPECIES = [
+  {k:'urso',   n:'Urso',   c:'#6E4A2E'},
+  {k:'cervo',  n:'Cervo',  c:'#C9A85C'},
+  {k:'salmao', n:'Salmão', c:'#DE3C7C'},
+  {k:'buteo',  n:'Búteo',  c:'#5BAEDC'},
+  {k:'raposa', n:'Raposa', c:'#E88428'}
+];
+
+const TOKENS = {
+  circulo:   {n:'Círculo',   c:'#9A7549'},
+  oval:      {n:'Oval',      c:'#E0D2AC'},
+  triangulo: {n:'Triângulo', c:'#EBA2BE'},
+  losango:   {n:'Losango',   c:'#A6D0E8'},
+  quadrado:  {n:'Quadrado',  c:'#F2B183'}
+};
+
+const MILESTONES = [
+  {at:8,  n:'Estudo de Rio',        c:'#4FA3C7'},
+  {at:16, n:'Estudo de Zona Úmida', c:'#8DBE4A'},
+  {at:24, n:'Estudo de Floresta',   c:'#2F6B3F'},
+  {at:32, n:'Estudo de Montanha',   c:'#AFC4D2'},
+  {at:40, n:'Estudo de Pradaria',   c:'#E8B93C'},
+  {at:50, n:'Biólogo de Cascadia',  c:'#C98A2E'}
+];
+
+const CEN = [
+  {p:80,  c:'AAAAA', o:[]},
+  {p:80,  c:'BBBBB', o:[]},
+  {p:80,  c:'CCCCC', o:[]},
+  {p:85,  c:'DDDDD', o:[]},
+  {p:85,  c:'CDBBB', o:['Receba a pontuação máxima de Raposa 3 vezes']},
+  {p:85,  c:'DBCCB', o:['Jogue pelo menos 4 de cada Espécie']},
+  {p:90,  c:'BCCDC', o:['Pontue 20+ por Búteo']},
+  {p:90,  c:'CBBAD', o:['Pontue 5+ por Floresta','Urso não pode ficar adjacente a Cervo']},
+  {p:90,  c:'CADCB', o:['Pontue 10+ por cada Espécie','Pontue 5+ por cada Habitat']},
+  {p:95,  c:'CBDBB', o:['Pontue 60 no total pelas Espécies','Pontue 7+ por quaisquer 3 Habitats']},
+  {p:95,  c:'BAACA', o:['Pontue 30+ por Urso','Floresta e Rio não podem ficar adjacentes']},
+  {p:95,  c:'ABAAC', o:['Receba a pontuação máxima de Salmão 1 vez','Cervo não pode ser colocado em Floresta','Pontue 12+ em 1 Habitat qualquer']},
+  {p:100, c:'DCCBC', o:['Receba a pontuação máxima de Cervo 1 vez','Jogue pelo menos 5 Búteos','Búteo deve ficar adjacente a Cervo']},
+  {p:100, c:'ACBAD', o:['Montanha e Pradaria não podem ficar adjacentes','Zona Úmida e Rio não podem ficar adjacentes','Pontue 35 no total pelos Habitats']},
+  {p:100, c:'ADADA', o:['Pontue 5+ por Floresta','Pontue 7+ por quaisquer 3 Habitats','Pontue 20+ por quaisquer 2 Espécies']}
+];
+
+const NOR = [
+  'Pontue 80+','Pontue 85+','Pontue 90+','Pontue 95+','Pontue 100+','Pontue 105+','Pontue 110+',
+  'Não tenha nenhuma Ficha de Natureza restante',
+  'Não tenha nenhum Urso','Não tenha nenhum Cervo','Não tenha nenhum Salmão',
+  'Não tenha nenhum Búteo','Não tenha nenhuma Raposa',
+  'Tenha mais do que 10 de uma única Espécie',
+  'Vença pela Maioria em 3 Habitats',
+  'Pontue 5+ em todos os Habitats',
+  'Pontue 12+ em um Habitat','Pontue 15+ em um Habitat',
+  'Pontue 12+ em cada Espécie','Pontue 20+ em duas Espécies','Pontue 30+ em uma Espécie',
+  'Termine a partida com 5+ Fichas de Natureza',
+  'Termine a partida com 10+ Fichas de Natureza',
+  'Não tenha Habitats de Pedra Angular preenchidos',
+  'Tenha apenas 3 Espécies diferentes'
+];
+
+const RES = [
+  'Pelo menos um Habitat deve combinar ao posicionar peças.',
+  'Nenhum Habitat pode combinar ao posicionar peças. Ignore a pontuação dos Habitats nesta partida.',
+  'Todos os corredores de Habitat de exatamente três peças valem 3 pontos cada.',
+  'Corredores de Habitat precisam ter tamanho 5+ para pontuar.',
+  'Jogue com apenas três pares de peça/marcador na exibição.',
+  'Jogue com dois conjuntos de Cartas de Pontuação de Espécie — cada jogador escolhe individualmente qual dos dois pontuará.',
+  'Não use as Peças de Habitat Iniciais. O meio ambiente de cada jogador começa com duas Peças de Habitat aleatórias.',
+  'É necessário duas Fichas de Natureza para realizar uma Ação de Ficha de Natureza.',
+  'Você não pode colocar o Marcador de Espécie na Peça de Habitat que você acabou de posicionar.',
+  'Jogue revelando as cartas: cada jogador começa com uma das cinco Cartas de Pontuação de Espécie na mão (secreta) e as restantes ficam à vista na mesa. Ao usar uma ficha de natureza, revele sua carta.'
+];
+
+const HOWTO = {
+  cen:'Vale em partidas com dois jogadores ou solo. <b>Todos os que passarem no cenário</b> marcam a conquista. Solo: siga do 1 ao 15, a dificuldade sobe.',
+  nor:'Partida normal pelas regras do jogo. Apenas o <b>vencedor</b> marca, e <b>no máximo uma</b> conquista por partida.',
+  res:'Partida normal com uma restrição escolhida da lista. Apenas o <b>vencedor</b> marca a conquista da restrição usada.'
+};
+
+const TOTAL = CEN.length + NOR.length + RES.length; // 50
+
+/* ============================================================
+   Armazenamento (artefato → navegador → memória)
+   ============================================================ */
+const KEY = 'cascadia-conquistas-v1';
+const mem = {};
+const Store = {
+  async get(){
+    if (window.storage && window.storage.get){
+      try { const r = await window.storage.get(KEY); if (r && r.value) return r.value; } catch(e){}
+    }
+    try { const v = localStorage.getItem(KEY); if (v) return v; } catch(e){}
+    return mem[KEY] || null;
+  },
+  async set(v){
+    mem[KEY] = v;
+    if (window.storage && window.storage.set){
+      try { await window.storage.set(KEY, v); return; } catch(e){}
+    }
+    try { localStorage.setItem(KEY, v); } catch(e){}
+  }
+};
+
+/* ============================================================
+   Estado
+   ============================================================ */
+let state = {
+  players:[
+    {name:'Jogador 1', token:'circulo',   marks:[]},
+    {name:'Jogador 2', token:'losango',   marks:[]}
+  ],
+  mode:'cen'
+};
+let sets = [new Set(), new Set()];
+
+function serialize(){
+  return JSON.stringify({
+    v:1,
+    players: state.players.map((p,i)=>({name:p.name, token:p.token, marks:[...sets[i]]}))
+  });
+}
+let saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    await Store.set(serialize());
+    const s=document.getElementById('saved');
+    s.classList.add('on'); setTimeout(()=>s.classList.remove('on'),1100);
+  }, 220);
+}
+function load(raw){
+  try{
+    const d = JSON.parse(raw);
+    if(!d || !Array.isArray(d.players)) return false;
+    d.players.slice(0,2).forEach((p,i)=>{
+      if(p.name) state.players[i].name = String(p.name).slice(0,22);
+      if(p.token && TOKENS[p.token]) state.players[i].token = p.token;
+      sets[i] = new Set(Array.isArray(p.marks)?p.marks:[]);
+    });
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ============================================================
+   Formas das fichas de natureza
+   ============================================================ */
+function shape(kind, size, fill, stroke){
+  const s = size, h = s/2;
+  const st = stroke ? ` stroke="${stroke}" stroke-width="1.2"` : '';
+  switch(kind){
+    case 'circulo':   return `<circle cx="${h}" cy="${h}" r="${h*0.78}" fill="${fill}"${st}/>`;
+    case 'oval':      return `<ellipse cx="${h}" cy="${h}" rx="${h*0.58}" ry="${h*0.82}" fill="${fill}"${st}/>`;
+    case 'triangulo': return `<path d="M${h} ${s*0.14} L${s*0.90} ${s*0.82} L${s*0.10} ${s*0.82} Z" fill="${fill}"${st}/>`;
+    case 'losango':   return `<path d="M${h} ${s*0.08} L${s*0.88} ${h} L${h} ${s*0.92} L${s*0.12} ${h} Z" fill="${fill}"${st}/>`;
+    case 'quadrado':  return `<rect x="${s*0.15}" y="${s*0.15}" width="${s*0.70}" height="${s*0.70}" rx="${s*0.09}" fill="${fill}"${st}/>`;
+  }
+  return '';
+}
+function tokenSvg(kind, size, fill){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true">${shape(kind,size,fill,'rgba(43,29,18,.45)')}</svg>`;
+}
+
+/* ============================================================
+   Trilha de conquistas (p. 12)
+   ============================================================ */
+function trailSvg(i){
+  const p = state.players[i];
+  const col = TOKENS[p.token].c;
+  const done = sets[i].size;
+  const W=500, H=54, x0=16, x1=486;
+  const step = (x1-x0)/(TOTAL-1);
+  const midY = 30, amp = 7;
+
+  let bands='';
+  let prev=0;
+  MILESTONES.forEach(m=>{
+    const a = x0 + prev*step - step/2, b = x0 + (m.at-1)*step + step/2;
+    bands += `<rect x="${a.toFixed(1)}" y="14" width="${(b-a).toFixed(1)}" height="30" fill="${m.c}" opacity=".22"/>`;
+    prev = m.at;
+  });
+
+  let pts=[];
+  for(let n=1;n<=TOTAL;n++){
+    const x = x0 + (n-1)*step;
+    const y = midY + Math.sin(n*0.42)*amp;
+    pts.push([n,x,y]);
+  }
+  const path = 'M'+pts.map(q=>`${q[1].toFixed(1)} ${q[2].toFixed(1)}`).join(' L');
+
+  let nodes='';
+  pts.forEach(([n,x,y])=>{
+    const ms = MILESTONES.find(m=>m.at===n);
+    const on = n<=done;
+    if(ms){
+      nodes += `<g transform="translate(${(x-9).toFixed(1)},${(y-8).toFixed(1)})">
+        <rect width="18" height="16" rx="3" fill="${on?'#1E6046':'#46301F'}" opacity="${on?1:.55}"/>
+        <text x="9" y="11.6" text-anchor="middle" font-family="Bitter,Georgia,serif" font-size="9.5" font-weight="700" fill="#F6EFDF">${n}</text>
+      </g>`;
+    } else {
+      const g = `<g transform="translate(${(x-4.5).toFixed(1)},${(y-4.5).toFixed(1)})">${
+        shape(p.token, 9, on?col:'#FBF7EC', on?'rgba(43,29,18,.55)':'rgba(70,48,31,.35)')
+      }</g>`;
+      nodes += g;
+    }
+  });
+
+  return `<svg class="trail" viewBox="0 0 ${W} ${H}" role="img" aria-label="Trilha: ${done} de ${TOTAL} conquistas">
+    ${bands}
+    <path d="${path}" fill="none" stroke="rgba(70,48,31,.28)" stroke-width="1" stroke-dasharray="2 3"/>
+    ${nodes}
+  </svg>`;
+}
+
+function rankOf(done){
+  let cur='Trilha iniciada', next=MILESTONES[0];
+  for(const m of MILESTONES){
+    if(done>=m.at){ cur=m.n; next=MILESTONES[MILESTONES.indexOf(m)+1]||null; }
+  }
+  if(done===0) cur='Ainda na trilha';
+  return {cur,next};
+}
+
+/* ============================================================
+   Render
+   ============================================================ */
+function renderPlayers(){
+  const el = document.getElementById('players');
+  el.innerHTML = state.players.map((p,i)=>{
+    const col = TOKENS[p.token].c;
+    const done = sets[i].size;
+    const {cur,next} = rankOf(done);
+    return `<div class="pcard" style="--tok:${col}">
+      <div class="prow">
+        <button class="tokbtn" data-tok="${i}" aria-label="Trocar a trilha de ${p.name}">${tokenSvg(p.token,22,col)}</button>
+        <input class="pname" data-name="${i}" value="${p.name.replace(/"/g,'&quot;')}" maxlength="22" aria-label="Nome do jogador ${i+1}" spellcheck="false">
+        <div class="pscore"><b>${done}</b><span>de ${TOTAL}</span></div>
+      </div>
+      <div class="prank"><b>${cur}</b><span>${next?`faltam ${next.at-done} para ${next.n}`:'trilha completa'}</span></div>
+      ${trailSvg(i)}
+    </div>`;
+  }).join('');
+}
+
+function entries(mode){
+  if(mode==='cen') return CEN.map((s,i)=>({id:'cen-'+(i+1), n:i+1, sc:s}));
+  if(mode==='nor') return NOR.map((t,i)=>({id:'nor-'+(i+1), n:i+1, txt:t}));
+  return RES.map((t,i)=>({id:'res-'+(i+1), n:i+1, txt:t}));
+}
+
+function cardsHtml(letters){
+  return `<div class="cards">${SPECIES.map((s,i)=>
+    `<span class="sc" title="${s.n}: carta ${letters[i]}"><i style="background:${s.c}"></i><b>${letters[i]}</b></span>`
+  ).join('')}</div>`;
+}
+
+function marksHtml(id){
+  return `<div class="marks">${state.players.map((p,i)=>{
+    const col = TOKENS[p.token].c, on = sets[i].has(id);
+    return `<button class="mark" style="--tok:${col}" data-mark="${id}" data-p="${i}" aria-pressed="${on}">
+      ${tokenSvg(p.token,17,col)}<span>${p.name}</span></button>`;
+  }).join('')}</div>`;
+}
+
+function render(){
+  const mode = state.mode;
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', String(t.dataset.mode===mode)));
+  document.getElementById('howto').innerHTML = HOWTO[mode];
+
+  const onlyPending = document.getElementById('pending').checked;
+  const all = entries(mode);
+  const list = all.filter(e => !onlyPending || !(sets[0].has(e.id) && sets[1].has(e.id)));
+
+  const a = all.filter(e=>sets[0].has(e.id)).length;
+  const b = all.filter(e=>sets[1].has(e.id)).length;
+  document.getElementById('count').textContent = `${a} · ${b} de ${all.length}`;
+
+  const box = document.getElementById('list');
+  if(!list.length){
+    box.innerHTML = `<p class="empty">Tudo conquistado neste modo pelos dois. Desmarque “Só o que falta” para rever a lista.</p>`;
+    return;
+  }
+  box.innerHTML = list.map(e=>{
+    const both = sets[0].has(e.id) && sets[1].has(e.id);
+    if(e.sc){
+      const objs = e.sc.o.length ? `<ul class="objs">${e.sc.o.map(o=>`<li>${o}</li>`).join('')}</ul>` : '';
+      return `<article class="item${both?' done':''}">
+        <div class="ihead"><span class="num">${e.n}</span><span class="goal">${e.sc.p}+ pontos</span></div>
+        ${cardsHtml(e.sc.c)}
+        ${objs}
+        ${marksHtml(e.id)}
+      </article>`;
+    }
+    return `<article class="item${both?' done':''}">
+      <div class="ihead"><span class="num">${e.n}</span></div>
+      <p class="itext">${e.txt}</p>
+      ${marksHtml(e.id)}
+    </article>`;
+  }).join('');
+}
+
+/* ============================================================
+   Eventos
+   ============================================================ */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{ state.mode=t.dataset.mode; render(); window.scrollTo({top:document.querySelector('nav').offsetTop-2,behavior:'smooth'}); });
+});
+document.getElementById('pending').addEventListener('change', render);
+
+document.getElementById('list').addEventListener('click', ev=>{
+  const b = ev.target.closest('.mark'); if(!b) return;
+  const id = b.dataset.mark, i = +b.dataset.p;
+  if(sets[i].has(id)) sets[i].delete(id); else sets[i].add(id);
+  save(); renderPlayers(); render();
+});
+
+document.getElementById('players').addEventListener('input', ev=>{
+  const f = ev.target.closest('[data-name]'); if(!f) return;
+  const i = +f.dataset.name;
+  state.players[i].name = f.value || `Jogador ${i+1}`;
+  save();
+  document.querySelectorAll(`.mark[data-p="${i}"] span`).forEach(s=>s.textContent = state.players[i].name);
+});
+
+/* seletor de trilha */
+let sheetFor = 0;
+const sheet = document.getElementById('sheet');
+document.getElementById('players').addEventListener('click', ev=>{
+  const b = ev.target.closest('[data-tok]'); if(!b) return;
+  sheetFor = +b.dataset.tok;
+  document.getElementById('sheetTitle').textContent = `Trilha de ${state.players[sheetFor].name}`;
+  document.getElementById('toks').innerHTML = Object.entries(TOKENS).map(([k,v])=>{
+    const taken = state.players[1-sheetFor].token===k;
+    return `<button data-pick="${k}" aria-pressed="${state.players[sheetFor].token===k}" ${taken?'disabled':''}
+      aria-label="${v.n}">${tokenSvg(k,26,v.c)}</button>`;
+  }).join('');
+  sheet.classList.add('on');
+});
+document.getElementById('toks').addEventListener('click', ev=>{
+  const b = ev.target.closest('[data-pick]'); if(!b || b.disabled) return;
+  state.players[sheetFor].token = b.dataset.pick;
+  save(); renderPlayers(); render(); sheet.classList.remove('on');
+});
+document.getElementById('sheetClose').addEventListener('click',()=>sheet.classList.remove('on'));
+sheet.addEventListener('click', e=>{ if(e.target===sheet) sheet.classList.remove('on'); });
+
+/* exportar / importar / zerar */
+document.getElementById('exp').addEventListener('click', async ()=>{
+  const data = serialize();
+  try{
+    const blob = new Blob([data],{type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'conquistas-cascadia.json';
+    a.click(); URL.revokeObjectURL(a.href);
+  }catch(e){
+    prompt('Copie este código para guardar seu progresso:', data);
+  }
+});
+document.getElementById('imp').addEventListener('click', ()=>{
+  const inp = document.createElement('input');
+  inp.type='file'; inp.accept='.json,application/json';
+  inp.onchange = () => {
+    const f = inp.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      if(load(r.result)){ save(); renderPlayers(); render(); }
+      else alert('Arquivo não reconhecido. Use um arquivo exportado por este app.');
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+});
+document.getElementById('rst').addEventListener('click', ()=>{
+  if(!confirm('Apagar todas as conquistas dos dois jogadores? Isso não pode ser desfeito.')) return;
+  sets = [new Set(), new Set()];
+  save(); renderPlayers(); render();
+});
+
+/* início */
+(async ()=>{
+  const raw = await Store.get();
+  if(raw) load(raw);
+  renderPlayers(); render();
+})();
+</script>
+</body>
+</html>
