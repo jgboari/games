@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#151A1B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Raiders of Scythia — Solo Campaign</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23151A1B'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%23D4A32C' stroke-width='5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#151A1B; --panel:#1F2628; --panel2:#263030; --line:#394543;
+  --ink:#EDE6D6; --muted:#96A09C; --gold:#D4A32C; --red:#B04A34;
+  --green:#7FA35C; --blue:#5B8CA8;
+  --display:'Oswald','Trebuchet MS',sans-serif;
+  --body:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--body)}
+body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+button{font:inherit;cursor:pointer;background:none;border:none;color:inherit;padding:0}
+input,select,textarea{font-family:var(--body);font-size:14px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:9px 10px;width:100%;outline:none}
+textarea{resize:vertical}
+:focus-visible{box-shadow:0 0 0 2px var(--gold)}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+header .t{font-family:var(--display);font-size:17px;letter-spacing:.5px;line-height:1}
+header .s{font-size:11px;color:var(--muted)}
+header .mark{width:26px;height:26px;border-radius:50%;border:2px solid var(--gold)}
+main{max-width:560px;margin:0 auto;padding:16px}
+h1{font-family:var(--display);font-size:26px;font-weight:600;margin:0}
+h2{font-family:var(--display);font-size:18px;font-weight:600;margin:0 0 8px}
+p{line-height:1.6;font-size:13px}
+.muted{color:var(--muted)}
+.small{font-size:11px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.row{display:flex;align-items:center;gap:8px}
+.grid{display:grid;gap:8px}
+.btn{font-family:var(--display);font-size:14px;letter-spacing:.3px;border:1px solid var(--line);border-radius:6px;padding:9px 14px;color:var(--ink);display:inline-block}
+.btn.gold{background:var(--gold);color:#1B1608;border-color:var(--gold)}
+.btn.red{background:var(--red);color:#F6E9E4;border-color:var(--red)}
+.btn.solid{background:var(--panel2)}
+.btn.sm{font-size:12px;padding:5px 10px}
+.btn.full{display:block;width:100%;text-align:center}
+.btn[disabled]{opacity:.35}
+.back{font-family:var(--display);font-size:13px;color:var(--muted);margin-bottom:12px;display:block}
+.tag{font-family:var(--display);font-size:11px;border-radius:5px;padding:3px 7px;border:1px solid currentColor;display:inline-block}
+.box{width:15px;height:15px;border-radius:3px;border:1px solid var(--line);flex:none}
+.bar{display:flex;gap:2px;margin-top:8px}
+.bar i{flex:1;height:6px;border-radius:2px;background:var(--line)}
+.lvl{width:100%;text-align:left;display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.lvl.cur{border-color:var(--gold);background:var(--panel2)}
+.lvl .n{font-family:var(--display);font-size:20px;color:var(--muted);width:32px;flex:none}
+.lvl .nm{font-family:var(--display);font-size:15px}
+.track{display:flex;gap:3px}
+.track i{flex:1;height:26px;border-radius:3px;background:var(--panel);border:1px solid var(--line);opacity:.5}
+.track i.rw{opacity:.95}
+.check{width:100%;display:flex;gap:10px;align-items:flex-start;text-align:left;padding:9px 8px;border-radius:6px}
+.check .box{margin-top:2px}
+.check.on span{color:var(--muted);text-decoration:line-through}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:8px;padding:10px}
+.opt.on{border-color:var(--gold);background:var(--panel2)}
+.stat{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px}
+.stat b{display:block;font-family:var(--display);font-size:22px;color:var(--gold);font-weight:500}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;padding:14px 0;font-family:var(--display);font-size:13px;color:var(--muted);border-top:2px solid transparent}
+nav button.on{color:var(--gold);border-top-color:var(--gold)}
+#toast{position:fixed;left:0;right:0;bottom:80px;display:flex;justify-content:center;pointer-events:none;z-index:9}
+#toast div{background:var(--gold);color:#1B1608;font-family:var(--display);font-size:13px;padding:8px 14px;border-radius:6px}
+.sec{margin-top:22px}
+.acc{width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center;padding:13px;font-family:var(--display);font-size:16px}
+.bul{display:flex;gap:9px;margin-bottom:8px}
+.bul i{width:4px;height:4px;border-radius:2px;background:var(--gold);margin-top:8px;flex:none}
+.bul span{font-size:13px;line-height:1.55}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="t">Raiders of Scythia</div>
+    <div class="s">Solo Campaign · 19 Levels</div>
+  </div>
+  <div class="mark"></div>
+</header>
+
+<main id="app"></main>
+<div id="toast"></div>
+<nav id="nav"></nav>
+
+<script>
+/* =========================================================
+   Campaign data — Solo Campaign v1.0 + Rulebook
+   ========================================================= */
+const LEVELS = [
+{n:1,act:1,name:"Seasoned Warband",hero:"Enaree",
+ flavor:"A warband's size and strength decided how much influence a tribe held.",
+ rules:["+1 Minimum Crew to raid on all Raid Spaces."],setup:[],
+ goal:"You must have a Crew Strength of 16+ at the game's end (excludes Animals).",
+ challenge:"Have a Crew Strength of 28+ at the game's end (includes Animals).",
+ tip:"Hire early at the Barracks: the +1 Minimum Crew delays your first raid on every Settlement. Animals do not count towards the Goal, so favour high-Strength Crew and save Eagles and Horses for the Challenge."},
+{n:2,act:1,name:"Obligations",hero:"Husaru",
+ flavor:"Completing tasks reinforced a tribe's standing in the hierarchy.",
+ rules:["The AI receives +2 VP per completed Quest."],setup:[],
+ goal:"You must have 7+ Quests completed.",
+ challenge:"Have 1+ Equipment, Gold, Wagon and Livestock at the game's end.",
+ tip:"7 Quests means almost one Chief's Tent action per turn, so you need a Grey or Red Worker early. Contest the two Scythian Village Quests: every one the AI takes is worth 2 extra VP to them."},
+{n:3,act:1,name:"Daily Work",hero:"Arpada",
+ flavor:"Villages were the gathering points where warbands were coordinated.",
+ rules:["When placing a Worker, remove 1 coin from that Building and return it to the Main Supply (only when placing, not when picking up)."],
+ setup:["Place 2 Silver coins on each of the 8 Buildings in the Scythian Village (16 in total)."],
+ goal:"You must have removed all 16 Silver coins from the Scythian Village.",
+ challenge:"Have completed both Quests from the Scythian Village.",
+ tip:"That is 16 Worker placements in the Village, so 16 Working turns — every raid you take is a turn spent away from the Goal. The AI shortens the game on its own, so skip raids you do not need for score."},
+{n:4,act:1,name:"Beasts",hero:"Sparethra",
+ flavor:"Horses and eagles sat at the centre of Scythian warfare.",rules:[],
+ setup:["The AI receives 1 Horse with 2 Strength."],
+ goal:"You must have 8+ Animals in your crew at the game's end.",
+ challenge:"Have 6+ Silver and 1+ Equipment at the game's end.",
+ tip:"The cap is 5 Eagles and 5 Horses, so 8 Animals is close to the maximum. The Stables needs a Grey or Red Worker, so raid early to get one. Eagles cost 2 Silver and Horses cost 1 Equipment — the Market (2 Cards) is your steady source of Equipment."},
+{n:5,act:1,name:"Golden Trails",hero:"Patak",
+ flavor:"Gold set status and authority among the tribes.",rules:[],
+ setup:["Place 1 additional Gold in the left-most Raid Space for Cimmeria, Assyria and Persia."],
+ goal:"You must have 4+ Gold at the game's end.",
+ challenge:"Have 6+ Quests completed.",
+ tip:"More Gold on the board means more Yellow Dice on raids: more Strength, but more Wounds too. Gold is worth 2 VP each and is Quest currency, so spending it on Quests works directly against the Goal."},
+{n:6,act:1,name:"Supplies",hero:"Vadasz",
+ flavor:"Nomadic life ran on provisions and kumis.",
+ rules:["Raiding requires 1 additional Kumis and 1 additional Provision."],setup:[],
+ goal:null,challenge:"Have completed 2+ Raids in Greece.",
+ tip:"No extra Goal — you only need to outscore the AI — but every raid costs more. The Farm and Meeting Tent become the heart of your turn. Greece already asks for 2 Provisions and 2 Wagons, so plan on 3 Provisions and a spare Kumis before you set out."},
+{n:7,act:1,name:"Hard Lessons",hero:"Charope",
+ flavor:"Without leadership, villages and supply points stayed uncoordinated.",
+ rules:["After each AI turn, remove 1 Silver from the Town Centre to the Main Supply. When no Silver remains, you may use the Town Centre."],
+ setup:["Place 6 Silver coins on the Town Centre."],
+ goal:null,challenge:"Have 4+ Livestock at the game's end.",
+ tip:"Six turns with no Play Card, no Hero ability and no Eagle ability. Use that opening to bank Cards, Silver and Provisions — and remember the Town Centre Worker is still there for you to pick up."},
+{n:8,act:1,name:"Recovery",hero:"Katiari",
+ flavor:"New warriors joined the warband already carrying wounds.",
+ rules:["When hiring Crew, place 2 Wounds onto the newly hired Crew Member."],setup:[],
+ goal:"You must have 0 Wounds on your Crew at the game's end.",
+ challenge:"Have 0 Crew Members killed by the game's end.",
+ tip:"Every hire arrives at -2 effective Strength. The Barracks removes 2 Wounds for exactly 1 Kumis, so reserve late turns for cleaning up. Hiring Strength 2 Crew is risky here — one more Wound kills them."},
+{n:9,act:2,name:"Initiates",hero:null,
+ flavor:"Only those ready for hardship were taken into the tribe.",
+ rules:["To hire 1 Crew Member at the Barracks, discard 2 extra Crew Cards from your hand."],setup:[],
+ goal:"You must have a Crew Strength of 14+ at the game's end (excludes Animals).",
+ challenge:"Have completed 3+ Raids in Persia/Greece by the game's end.",
+ tip:"Each hire costs 3 Cards in total. The Meeting Tent (2 Cards) becomes near-mandatory and the 8-Card hand limit works in your favour. Hire few, hire strong."},
+{n:10,act:2,name:"Catching Up",hero:null,
+ flavor:"Tribes that fell behind had to move fast to regain control.",
+ rules:["The AI resolves 5 Scheme Cards before your first turn."],setup:[],
+ goal:null,challenge:"Do not complete a Quest from the Scythian Village.",
+ tip:"You start behind on VP with a board already thinned out, so the end-game trigger (2 Raid Spaces or 2 Quests) arrives much sooner. Resolve the 5 Schemes before picking your pair, then choose the Hero and Crew that let you raid quickly."},
+{n:11,act:2,name:"Small Circle",hero:null,
+ flavor:"A small, tightly coordinated group could act with more precision.",
+ rules:["The right-most Crew Member slot on your Player Board is blocked.","You can only hire a total of 4 Crew Members."],setup:[],
+ goal:"You must have completed 1+ Raids in Greece.",
+ challenge:"Have 5+ Kumis at the game's end.",
+ tip:"Greece requires a minimum of 4 Crew, so you must fill every available slot before the Goal is even possible. One slot fewer also costs you an Eagle and a Horse of capacity."},
+{n:12,act:2,name:"Deeds",hero:null,
+ flavor:"Status was measured by the skill to assert authority.",
+ rules:["When the AI completes a Quest, give it 1 Provision and discard 1 Silver coin.","When you complete a Quest, take 1 Provision from the Main Supply."],setup:[],
+ goal:"You must have completed a Quest from the Scythian Village.",
+ challenge:"Have 1+ more completed Quests than the AI at the game's end.",
+ tip:"A straight race for Quests: yours pay a Provision, theirs cost you Silver. The two Village Quests are visible from setup, so budget for them inside the first third of the game."},
+{n:13,act:2,name:"Shifting Chiefs",hero:null,
+ flavor:"Leadership among the clans was unstable and often challenged.",
+ rules:["After using a Hero action, discard the card and turn the top card of the Hero draw pile face up. If all cards are discarded, shuffle the discard pile to create a new draw pile."],
+ setup:["Shuffle the Hero draw pile and place it face down on the left-most space of your Player Board. Turn the top card face up."],
+ goal:null,challenge:"Have 5+ Provisions at the game's end.",
+ tip:"You cannot build the game around one Hero. Use the Town Centre when the face-up Hero is useful, and spend that action on a Play Card or an Eagle when it is not. Burning a Hero action just to cycle the pile is a legitimate play when you are digging for a specific ability."},
+{n:14,act:2,name:"Greek Envoys",hero:null,
+ flavor:"Contact with Greek intermediaries opened new raiding routes.",rules:[],
+ setup:["Discard from the game 3 cards from the AI Scheme draw pile that focus on Greece during raiding."],
+ goal:null,challenge:"Have completed 2+ Raids in Greece.",
+ tip:"Greece is effectively reserved for you, but the AI concentrates on Cimmeria, Assyria and Persia — the face-down Quests there disappear faster, and that is usually what ends the game."},
+{n:15,act:2,name:"Self Reliance",hero:null,
+ flavor:"Some leaders did not trust trade with outsiders.",
+ rules:["The Market cannot be used during this game.","If the AI attempts to block the Market, it remains on the blocked Building from the previous Scheme card."],
+ setup:["Place 1 Silver coin on the Market Building."],
+ goal:"You must have 5+ Silver coins at the game's end.",
+ challenge:"Have 3+ Wagons at the game's end.",
+ tip:"No Market means no trading Cards for Silver, Wagons or Equipment. The Silversmith (3 Silver with a Blue Worker) is your only tap for money, and Wagons come only from the Farm with a Red Worker or from Plunder — which pushes the Challenge onto your raids."},
+{n:16,act:2,name:"Collateral Damage",hero:null,
+ flavor:"When rival warbands struck, the violence spread outward.",
+ rules:["When the AI completes a raid, roll 1 Yellow Die and apply any damage to your Crew."],setup:[],
+ goal:"You must have 7+ Kumis at the game's end.",
+ challenge:"Have less than 3 Wounds on your Crew at the game's end.",
+ tip:"You will take Wounds without raiding at all. Keep slack in Strength and Kumis: the Meeting Tent gives 1 Card and 2 Kumis, and the Barracks removes 2 Wounds for 1 Kumis — but every Kumis spent healing is one short of the Goal of 7."},
+{n:17,act:3,name:"Goldrush",hero:null,
+ flavor:"Where gold surfaces, conflict follows.",
+ rules:["The AI receives +2 VP per completed Quest."],
+ setup:["Place 1 Gold on every Settlement on the Main Board that does not already have Gold."],
+ goal:"You must have 5+ Gold at the game's end.",challenge:null,
+ tip:"Nearly every raid now rolls extra Yellow Dice: more Strength, far more Wounds. Gold is 2 VP each, so the Goal and your score pull in the same direction — keep your Gold out of Quests."},
+{n:18,act:3,name:"Overcrowded",hero:null,
+ flavor:"Contested ground, crossed paths, nowhere left to shelter.",
+ rules:["Both AI Opponents can block the same Building in the Scythian Village."],
+ setup:["Place 2 AI Opponents who will draw from the same Scheme draw pile."],
+ goal:null,challenge:null,
+ tip:"Two Schemes per round: the board empties twice as fast and the game ends early. Favour high-VP raids over engine building. The playtest text does not say which opponent you must beat, so this app assumes the higher-scoring one."},
+{n:19,act:3,name:"Bloodbath",hero:null,
+ flavor:"Every new warrior joins the crew already wounded.",
+ rules:["When hiring Crew, place 2 Wounds onto the newly hired Crew Member.","When the AI completes a raid, roll 1 Yellow Die and apply any damage to your Crew."],setup:[],
+ goal:"You must have completed 2+ Raids in Greece.",challenge:null,
+ tip:"The two cruellest rules in the campaign at once. Hire few high-Strength Crew, hold Kumis for the Barracks, and lean on Horses for raid Strength — Animals never take Wounds."}
+];
+
+const ACT_INFO = {
+1:{title:"Act I — The Heroes",text:"Each level assigns a specific Hero; the standard rule for selecting Heroes is suspended. The starting Crew Member is selected from 2 cards drawn from the Crew draw pile (3 with the Command upgrade)."},
+2:{title:"Act II — The People",text:"Standard rules unless a level says otherwise. At the start of each level, draw two sets of one Hero and one starting Crew Member, then choose one set to play with."},
+3:{title:"Act III — The End",text:"Standard rules, two sets of Hero and starting Crew Member. There are no optional Challenges and no Upgrade Points can be earned for the Home Camp."}
+};
+
+const TRACKS = {
+command:{label:"Command",color:"var(--blue)",size:12,note:"More card choices during Setup.",rewards:[
+ {at:3,text:"+1 Handcard to choose from during Setup (discard)"},
+ {at:6,text:"+1 Handcard to choose from and +1 Starting Crew Member to choose from during Setup"},
+ {at:9,text:"+2 Handcards to choose from and +1 Starting Crew Member to choose from during Setup"},
+ {at:12,text:"+2 Handcards to choose from, +1 Starting Crew Member to choose from and +1 Handcard during Setup"}]},
+logistics:{label:"Logistics",color:"var(--green)",size:12,note:"Extra resources during Setup.",rewards:[
+ {at:1,text:"+1 Kumis during Setup"},
+ {at:4,text:"+1 Kumis and +1 Silver during Setup"},
+ {at:7,text:"+1 Kumis, +1 Silver and +1 Provision during Setup"},
+ {at:10,text:"+1 Kumis, +1 Silver, +1 Provision and +1 Livestock during Setup"},
+ {at:12,text:"+1 Kumis, +1 Silver, +1 Provision, +1 Livestock and +1 Wagon during Setup"}]},
+renown:{label:"Renown",color:"var(--red)",size:12,note:"Starting VP on the VP Track.",rewards:[
+ {at:2,text:"Start the game with 1 VP"},{at:4,text:"Start the game with 2 VP"},
+ {at:6,text:"Start the game with 3 VP"},{at:8,text:"Start the game with 4 VP"},
+ {at:10,text:"Start the game with 5 VP"},{at:12,text:"Start the game with 7 VP"}]}
+};
+
+const AI_CREW = [
+{id:"trader",name:"Trader",desc:"No Strength, starts with 1 Provision",diff:"Easiest"},
+{id:"lookout",name:"Lookout",desc:"1 Strength, starts with 2 Provisions",diff:"Easy"},
+{id:"huntsman",name:"Huntsman",desc:"1 Strength, 2 Provisions; gains 3 whenever it would gain 2",diff:"Hard"},
+{id:"outrider",name:"Outrider",desc:"2 Strength, 3 Provisions; gains 3 whenever she would gain 2",diff:"Hardest"}
+];
+
+const REFERENCE = [
+{title:"Solo setup",items:[
+"Set up as normal. Reveal only 2 pairs of Hero and Crew Cards and choose 1 (in Act I the Hero is fixed: draw 2 Crew Cards and choose 1).",
+"You are the first player. Start with 3 Silver and 1 Provision.",
+"Assign the AI a player colour and place their Score Marker on the 0 VP space.",
+"Shuffle the 14 AI Scheme Cards to form a facedown Scheme Draw Pile.",
+"Select 1 AI Crew Card — this sets the difficulty — and give the AI the Provisions pictured down the left side of that card.",
+"Deal yourself 5 Crew Cards, keep 3 and discard 2."]},
+{title:"Opponent turns",items:[
+"Turn over the top card of the Scheme Draw Pile onto the Scheme Discard Pile.",
+"Moving down the left side of the card, check whether they can raid. If a check fails, they take the action to the right of where the raid check stopped.",
+"1) Are there Settlements left to raid in that civilization? If not, they gain a Quest.",
+"2) Can they spend the required Provisions? If not, they gain Provisions.",
+"3) Do they have enough Strength? If not, they gain a Horse (and spend no Provisions).",
+"If every check passes, they raid: remove all Plunder from the targetted Raid Space, pay the Provisions, discard Horses for Strength and score the VP.",
+"The bottom-right of the Scheme Card shows the Building blocked for you on your next turn.",
+"If the Draw Pile is empty, shuffle the Scheme Discard Pile to form a new one."]},
+{title:"Opponent targets and gains",items:[
+"Raid Space: shown by the icons below the civilization's name. If it is unavailable they move rightwards, rolling around to the left-most space.",
+"Quest: follow the arrows above the Quest Icon. With no Quests available on the Main Board, they gain a Horse instead.",
+"Horse: take the Horse from the position shown above the Horse Icon. Only the Horse section of the card matters; the Eagle section is ignored.",
+"When spending Strength they discard as few Horses as possible, without overspending if possible.",
+"There is no limit to how many Provisions the opponent may hold.",
+"End-game score: VP on the track, plus Quests and any remaining Horses (Eagles do not score)."]},
+{title:"Your turn",items:[
+"Place 1 Worker on an available Building and resolve its action, then pick up a different Worker — 1 of the 3 that were in the Village at the start of your turn — and resolve that Building's action.",
+"Or raid: place your Worker on one of the Settlement's Worker Spots, where it stays for the rest of the game.",
+"The Stables and Chief's Tent require a Grey or Red Worker. Blue Workers may never be placed there.",
+"All Buildings' actions are optional."]},
+{title:"Buildings",items:[
+"Stables: spend 2 Silver for 1 Eagle, or 1 Equipment for 1 Horse, from the 3 faceup Animal Cards.",
+"Barracks: hire 1 Crew Member from hand paying the printed Silver, or spend exactly 1 Kumis to remove 2 Wounds.",
+"Silversmith: 3 Silver with a Blue Worker, 2 Silver with a Grey or Red Worker.",
+"Farm: 2 Provisions with a Blue or Grey Worker; with a Red Worker, 3 Provisions or 1 Wagon.",
+"Chief's Tent: spend 1 Livestock for 2 Provisions and 1 Kumis, or complete 1 Quest.",
+"Town Centre: Play 1 Card from hand, use your Hero's ability, or use the ability of an Eagle.",
+"Meeting Tent: draw 2 Cards, or draw 1 Card and gain 2 Kumis.",
+"Market: discard 1 Card for 2 Silver, or discard 2 Cards for 1 Wagon or 1 Equipment."]},
+{title:"Raiding step by step",items:[
+"Requirements: the right Worker colour, a large enough Crew, and enough Provisions and Wagons.",
+"1) Place your Worker on the Settlement. 2) Pay the Provisions and Wagons. 3) Optional: spend Kumis for 1 Strength each.",
+"4) Roll the Dice: Red and White as shown for the civilization, Yellow equal to how many Raid Spaces there have Gold.",
+"5) Total your Strength: Kumis, rolled Dice, Crew and equipped Animals, plus Crew abilities. Compare it to the Settlement for VP or Wounds.",
+"6) Take the Plunder and the new Worker above your chosen space, and reveal the Quest beneath it if there is one."]},
+{title:"Wounds",items:[
+"Wounds go onto Crew Members, never onto Heroes or Animals.",
+"Each Crew Member takes Wounds up to their Strength, and each Wound reduces their Strength by 1.",
+"One more Wound at 0 Strength kills them, which counts as Killed rather than Wounded.",
+"Wounds only come off through death, the Barracks (1 Kumis removes 2), or some Town Centre effects."]},
+{title:"End of the game and scoring",items:[
+"Trigger: only 2 Raid Spaces or 2 Quests left on the Main Board. Finish the current turn, then take 1 final turn.",
+"Score for Crew, Animals, Quests and Plunder.",
+"Plunder: Gold 2 VP, Equipment 1 VP, Wagon 1 VP, each pair of Livestock 1 VP.",
+"Tie-breakers: most Quests, Crew and Animals; then most Silver, Provisions and Kumis."]},
+{title:"Limits",items:[
+"At the end of your turn: 8 Silver, 8 Provisions, 8 Kumis and 8 Cards in hand maximum.",
+"Maximum 5 Crew, 5 Eagles and 5 Horses on your Player Board.",
+"No limit on Plunder beyond the components themselves."]}
+];
+
+/* =========================================================
+   Storage (localStorage → window.storage → memory)
+   ========================================================= */
+const K_CAMP="ros:campaign:v1", K_GAMES="ros:games:v1";
+const mem={};
+let mode="memory";
+try{ localStorage.setItem("ros:test","1"); localStorage.removeItem("ros:test"); mode="local"; }
+catch(e){ if(window.storage) mode="host"; }
+
+async function load(k,fb){
+  try{
+    if(mode==="local"){ const v=localStorage.getItem(k); return v?JSON.parse(v):fb; }
+    if(mode==="host"){ const r=await window.storage.get(k); return r&&r.value?JSON.parse(r.value):fb; }
+  }catch(e){}
+  return mem[k]!==undefined?mem[k]:fb;
+}
+async function save(k,v){
+  mem[k]=v;
+  try{
+    if(mode==="local"){ localStorage.setItem(k,JSON.stringify(v)); return; }
+    if(mode==="host"){ await window.storage.set(k,JSON.stringify(v)); }
+  }catch(e){}
+}
+
+/* =========================================================
+   State
+   ========================================================= */
+const S = {
+  campaign:{levels:{},camp:{command:0,logistics:0,renown:0}},
+  games:[],
+  tab:"campaign", level:null, form:null, checks:{}, acc:0
+};
+
+const lv = n => S.campaign.levels[n] || {goal:false,challenge:false};
+const actDone = (a,f) => LEVELS.filter(l=>l.act===a).every(l=>lv(l.n)[f]);
+function earned(){
+  let p=0;
+  LEVELS.filter(l=>l.act<=2).forEach(l=>{const s=lv(l.n); if(s.goal)p++; if(s.challenge)p++;});
+  [1,2].forEach(a=>{ if(actDone(a,"goal"))p++; if(actDone(a,"challenge"))p++; });
+  return p;
+}
+const spent = () => S.campaign.camp.command+S.campaign.camp.logistics+S.campaign.camp.renown;
+const free = () => earned()-spent();
+function current(){ const l=LEVELS.find(l=>!lv(l.n).goal); return l?l.n:null; }
+function reward(id,f){ let b=null; TRACKS[id].rewards.forEach(r=>{ if(f>=r.at) b=r; }); return b; }
+const L = n => LEVELS.find(l=>l.n===n);
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const roman = a => a===1?"I":a===2?"II":"III";
+const plural = (n,w) => n+" "+w+(n===1?"":"s");
+
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.innerHTML="<div>"+esc(msg)+"</div>";
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.innerHTML="";},2200);
+}
+
+/* =========================================================
+   Screens
+   ========================================================= */
+function viewCampaign(){
+  const cur=current(), done=LEVELS.filter(l=>lv(l.n).goal).length, p=free();
+  let h="";
+  h+='<div class="muted small">'+done+' of 19 Levels won · '+plural(p,"Upgrade Point")+' available</div>';
+  h+='<div class="bar">'+LEVELS.map(l=>{
+    const s=lv(l.n);
+    const c=s.goal?(s.challenge?"var(--gold)":"var(--green)"):(l.n===cur?"var(--red)":"var(--line)");
+    return '<i style="background:'+c+'"></i>';
+  }).join("")+'</div>';
+
+  if(cur){
+    const c=L(cur);
+    h+='<div class="panel" style="border-color:var(--gold);padding:16px;margin-top:16px">'
+      +'<div style="font-family:var(--display);font-size:12px;color:var(--gold)">Current Level</div>'
+      +'<div style="font-family:var(--display);font-size:26px;line-height:1.1">'+pad(c.n)+' · '+esc(c.name)+'</div>'
+      +'<div class="muted" style="font-size:13px;margin-top:4px">Act '+roman(c.act)+(c.hero?' · Hero: '+esc(c.hero):'')+'</div>'
+      +'<div class="row" style="margin-top:14px">'
+      +'<button class="btn gold" data-go="level" data-n="'+c.n+'">Set up game</button>'
+      +'<button class="btn" data-go="form" data-n="'+c.n+'">Log result</button></div></div>';
+  }else{
+    h+='<div class="panel" style="border-color:var(--gold);padding:16px;margin-top:16px">'
+      +'<div style="font-family:var(--display);font-size:22px;color:var(--gold)">Campaign complete</div>'
+      +'<p class="muted" style="margin:4px 0 0">All 19 Levels are won. Check the list below for Challenges still open if you want to fill the Home Camp.</p></div>';
+  }
+
+  [1,2,3].forEach(a=>{
+    h+='<div class="sec"><h2>'+ACT_INFO[a].title+'</h2>'
+      +'<p class="muted" style="margin:0 0 10px;font-size:12px">'+ACT_INFO[a].text+'</p><div class="grid">';
+    LEVELS.filter(l=>l.act===a).forEach(l=>{
+      const s=lv(l.n);
+      h+='<button class="lvl'+(l.n===cur?' cur':'')+'" data-go="level" data-n="'+l.n+'">'
+        +'<span class="n" style="'+(s.goal?'color:var(--gold)':'')+'">'+pad(l.n)+'</span>'
+        +'<span style="flex:1"><span class="nm" style="display:block">'+esc(l.name)+'</span>'
+        +'<span class="muted small">'+(l.hero?'Hero: '+esc(l.hero):(l.goal?"Goal":"No extra Goal"))+'</span></span>'
+        +'<span class="box" style="'+(s.goal?'background:var(--green);border-color:var(--green)':'')+'"></span>'
+        +(l.act<=2?'<span class="box" style="'+(s.challenge?'background:var(--gold);border-color:var(--gold)':'')+'"></span>':'')
+        +'</button>';
+    });
+    h+='</div>';
+    if(a<=2){
+      h+='<div class="row" style="justify-content:space-between;border:1px dashed var(--line);border-radius:8px;padding:12px;margin-top:8px">'
+        +'<span class="muted small">Act summary: all Goals · all Challenges</span><span class="row" style="gap:4px">'
+        +'<span class="box" style="'+(actDone(a,"goal")?'background:var(--green);border-color:var(--green)':'')+'"></span>'
+        +'<span class="box" style="'+(actDone(a,"challenge")?'background:var(--gold);border-color:var(--gold)':'')+'"></span>'
+        +'</span></div>';
+    }
+    h+='</div>';
+  });
+  return h;
+}
+
+function setupSteps(l){
+  const c=S.campaign.camp, st=[];
+  st.push("Set up the Main Board as normal: Quests, Plunder and Workers.");
+  if(l.act===1) st.push("Use "+l.hero+" as your Hero Card. Draw "+(c.command>=6?"3":"2")+" cards from the Crew draw pile and choose 1 as your starting Crew Member.");
+  else st.push("Reveal 2 sets of one Hero and one starting Crew Member and choose 1 set"+(c.command>=6?" (the Command upgrade gives you 1 extra Crew Member to choose from)":"")+".");
+  st.push("Select the AI Crew Card for difficulty and give the AI the Provisions pictured on that card.");
+  st.push("Shuffle the AI Scheme Cards. AI Score Marker on 0 VP.");
+  const rl=reward("logistics",c.logistics);
+  st.push("Take 3 Silver and 1 Provision"+(rl?", plus the Logistics reward: "+rl.text.replace(" during Setup",""):"")+".");
+  const rc=reward("command",c.command);
+  st.push("Deal yourself 5 Crew Cards"+(rc?" plus the Command reward: "+rc.text:"")+", keep 3 and discard the rest.");
+  const rr=reward("renown",c.renown);
+  if(rr) st.push("Renown: "+rr.text+".");
+  l.setup.forEach(x=>st.push("Level rule — "+x));
+  return st;
+}
+
+function viewLevel(){
+  const l=L(S.level), s=lv(l.n);
+  let h='<button class="back" data-go="campaign">‹ Campaign</button>';
+  h+='<div style="font-family:var(--display);font-size:12px;color:var(--gold)">Act '+roman(l.act)+' · Level '+pad(l.n)+'</div>';
+  h+='<h1 style="font-size:30px;line-height:1.05">'+esc(l.name)+'</h1>';
+  if(l.hero) h+='<div class="muted" style="font-size:13px;margin-top:2px">Hero Card: '+esc(l.hero)+'</div>';
+  h+='<p class="muted" style="font-style:italic">'+esc(l.flavor)+'</p>';
+  h+='<div class="row" style="gap:6px;margin-top:12px">'
+    +'<span class="tag" style="color:'+(s.goal?"var(--green)":"var(--muted)")+'">'+(s.goal?"Level won":"Level open")+'</span>'
+    +(l.act<=2?'<span class="tag" style="color:'+(s.challenge?"var(--gold)":"var(--muted)")+'">'+(s.challenge?"Challenge done":"Challenge open")+'</span>':'')
+    +'</div>';
+
+  h+='<div class="sec"><h2>Win condition</h2><div class="panel" style="padding:12px;font-size:13px;line-height:1.6">'
+    +'Finish with more VP than the AI Opponent'
+    +(l.goal?', and: '+esc(l.goal):'.')+'</div></div>';
+
+  if(l.rules.length||l.setup.length){
+    h+='<div class="sec"><h2>Level rules</h2><div class="panel" style="padding:12px">';
+    l.setup.forEach(r=>h+='<div class="row" style="align-items:flex-start;gap:8px;margin-bottom:8px"><span style="font-family:var(--display);font-size:11px;color:var(--blue);margin-top:2px">SETUP</span><span style="font-size:13px;line-height:1.5">'+esc(r)+'</span></div>');
+    l.rules.forEach(r=>h+='<div class="row" style="align-items:flex-start;gap:8px;margin-bottom:8px"><span style="font-family:var(--display);font-size:11px;color:var(--red);margin-top:2px">PLAY</span><span style="font-size:13px;line-height:1.5">'+esc(r)+'</span></div>');
+    h+='</div></div>';
+  }
+
+  if(l.challenge){
+    h+='<div class="sec"><h2>Optional Challenge</h2><div class="panel" style="border-color:var(--gold);padding:12px">'
+      +'<div style="font-size:13px;line-height:1.6">'+esc(l.challenge)+'</div>'
+      +'<div class="muted small" style="margin-top:6px">Counts only if you also meet the win conditions. Worth 1 Home Camp Upgrade Point.</div></div></div>';
+  }
+
+  h+='<div class="sec"><h2>Strategy note</h2><p>'+esc(l.tip)+'</p></div>';
+
+  const st=setupSteps(l), ck=S.checks[l.n]||{};
+  h+='<div class="sec"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Setup checklist</h2>'
+    +'<button class="btn sm" data-act="clearchecks">Clear</button></div><div class="panel" style="padding:4px">';
+  st.forEach((x,i)=>{
+    const on=!!ck[i];
+    h+='<button class="check'+(on?' on':'')+'" data-act="check" data-i="'+i+'">'
+      +'<span class="box" style="'+(on?'background:var(--green);border-color:var(--green)':'')+'"></span>'
+      +'<span style="font-size:13px;line-height:1.5">'+esc(x)+'</span></button>';
+  });
+  h+='</div></div>';
+  h+='<div class="sec"><button class="btn gold full" data-go="form" data-n="'+l.n+'">Log result for this Level</button></div>';
+  return h;
+}
+
+function viewCamp(){
+  const e=earned(), s=spent(), f=e-s;
+  let h='<h1>Home Camp</h1>';
+  h+='<p class="muted">Every Goal and every Challenge completed in Acts I and II fills 1 box, plus 1 for each Act summary — all Goals and all Challenges. Spend those boxes across the three tracks. Only the highest reward on each track counts.</p>';
+  h+='<div class="row" style="justify-content:space-between;border:1px solid var(--gold);border-radius:8px;padding:12px;background:var(--panel)">'
+    +'<span class="muted small">Earned '+e+' · spent '+s+'</span>'
+    +'<span style="font-family:var(--display);font-size:22px;color:'+(f>0?"var(--gold)":"var(--muted)")+'">'+f+' available</span></div>';
+
+  Object.keys(TRACKS).forEach(id=>{
+    const t=TRACKS[id], fl=S.campaign.camp[id], act=reward(id,fl);
+    h+='<div class="sec"><div class="row" style="justify-content:space-between;margin-bottom:6px">'
+      +'<span><span style="font-family:var(--display);font-size:18px;color:'+t.color+'">'+t.label+'</span> <span class="muted small">'+t.note+'</span></span>'
+      +'<span class="row" style="gap:6px">'
+      +'<button class="btn sm" data-act="camp" data-id="'+id+'" data-d="-1"'+(fl===0?" disabled":"")+'>−</button>'
+      +'<button class="btn sm solid" data-act="camp" data-id="'+id+'" data-d="1"'+((f<=0||fl===t.size)?" disabled":"")+'>+</button>'
+      +'</span></div><div class="track">';
+    for(let i=0;i<t.size;i++){
+      const filled=i<fl, isR=t.rewards.some(r=>r.at===i+1);
+      h+='<i class="'+(isR?"rw":"")+'" style="'+(filled?"background:"+t.color+";opacity:1;border-color:"+t.color:(isR?"border-color:"+t.color:""))+'"></i>';
+    }
+    h+='</div><div style="font-size:12px;margin-top:8px">'+(act?"Active: "+act.text:"No reward reached yet.")+'</div>';
+    t.rewards.forEach(r=>{
+      h+='<div class="small" style="line-height:1.5;color:'+(fl>=r.at?t.color:"var(--muted)")+'">'+r.at+' · '+r.text+'</div>';
+    });
+    h+='</div>';
+  });
+  h+='<p class="muted small" style="margin-top:22px">Note: the campaign PDF shows the Renown rewards only as numbered Eagle icons (1, 2, 3, 4, 5, 7). They are read here as starting VP.</p>';
+  return h;
+}
+
+function viewForm(){
+  const f=S.form, l=L(f.level);
+  const my=parseInt(f.myVP,10), op=parseInt(f.aiVP,10);
+  const computed=!isNaN(my)&&!isNaN(op)&&my>op&&f.goal;
+  const win=f.override===null?computed:f.override;
+  let h='<button class="back" data-go="back">‹ Cancel</button><h1>Log a game</h1><div class="grid" style="gap:14px;margin-top:16px">';
+
+  h+='<div><div class="muted small" style="margin-bottom:4px">Level</div><select id="f-level">'
+    +LEVELS.map(x=>'<option value="'+x.n+'"'+(x.n===f.level?" selected":"")+'>'+pad(x.n)+' · '+esc(x.name)+'</option>').join("")
+    +'</select></div>';
+  h+='<div><div class="muted small" style="margin-bottom:4px">Date</div><input type="date" id="f-date" value="'+f.date+'"></div>';
+
+  h+='<div><div class="muted small" style="margin-bottom:4px">AI Crew Card (difficulty)</div><div class="grid" style="gap:6px">';
+  AI_CREW.forEach(c=>{
+    h+='<button class="opt'+(f.ai===c.id?" on":"")+'" data-act="ai" data-id="'+c.id+'">'
+      +'<div style="font-family:var(--display);font-size:14px;color:'+(f.ai===c.id?"var(--gold)":"var(--ink)")+'">'+c.name+' <span class="muted small">· '+c.diff+'</span></div>'
+      +'<div class="muted small">'+c.desc+'</div></button>';
+  });
+  h+='</div></div>';
+
+  h+='<div class="row" style="gap:10px;align-items:flex-end">'
+    +'<div style="flex:1"><div class="muted small" style="margin-bottom:4px">Your VP</div><input type="number" inputmode="numeric" id="f-my" value="'+esc(f.myVP)+'"></div>'
+    +'<div style="flex:1"><div class="muted small" style="margin-bottom:4px">AI VP</div><input type="number" inputmode="numeric" id="f-ai" value="'+esc(f.aiVP)+'"></div></div>';
+
+  if(l.goal){
+    h+='<button class="check" data-act="goal" style="border:1px solid '+(f.goal?"var(--green)":"var(--line)")+'">'
+      +'<span class="box" style="'+(f.goal?"background:var(--green);border-color:var(--green)":"")+'"></span>'
+      +'<span style="font-size:13px;line-height:1.5"><b style="font-family:var(--display)">Goal</b> — '+esc(l.goal)+'</span></button>';
+  }
+  if(l.challenge){
+    h+='<button class="check" data-act="ch" style="border:1px solid '+(f.challenge?"var(--gold)":"var(--line)")+'">'
+      +'<span class="box" style="'+(f.challenge?"background:var(--gold);border-color:var(--gold)":"")+'"></span>'
+      +'<span style="font-size:13px;line-height:1.5"><b style="font-family:var(--display)">Challenge</b> — '+esc(l.challenge)+'</span></button>';
+  }
+
+  h+='<div class="panel" style="padding:12px;border-color:'+(win?"var(--green)":"var(--red)")+'">'
+    +'<div style="font-family:var(--display);font-size:16px;color:'+(win?"var(--green)":"var(--red)")+'">'+(win?"Level won":"Level lost")+'</div>'
+    +'<div class="muted small" style="margin-top:2px;line-height:1.5">Worked out from VP and the Goal. On a tie, apply the standard tie-breakers and set this by hand.</div>'
+    +'<div style="margin-top:8px"><button class="btn sm" data-act="flip">Mark as '+(win?"lost":"won")+'</button></div></div>';
+
+  h+='<div><div class="muted small" style="margin-bottom:4px">Notes</div>'
+    +'<textarea id="f-notes" rows="3" placeholder="Hero and Crew used, what went wrong, what to try next time…">'+esc(f.notes)+'</textarea></div>';
+  h+='<button class="btn gold full" data-act="save">Save game</button></div>';
+  return h;
+}
+
+function viewGames(){
+  const w=S.games.filter(g=>g.win).length;
+  let h='<div class="row" style="justify-content:space-between"><h1>Game Log</h1><button class="btn gold sm" data-go="form">New</button></div>';
+  h+='<div class="row" style="gap:8px;margin-top:16px">'
+    +'<div class="stat"><b>'+S.games.length+'</b><span class="muted small">played</span></div>'
+    +'<div class="stat"><b>'+w+'</b><span class="muted small">won</span></div>'
+    +'<div class="stat"><b>'+(S.games.length?Math.round(w/S.games.length*100)+"%":"—")+'</b><span class="muted small">win rate</span></div></div>';
+
+  h+='<div class="grid" style="margin-top:18px">';
+  if(!S.games.length) h+='<p class="muted">No games logged yet. Log your first one to track how the campaign is going.</p>';
+  S.games.slice().sort((a,b)=>b.id-a.id).forEach(g=>{
+    const l=L(g.level), ai=AI_CREW.find(c=>c.id===g.ai);
+    h+='<div class="panel" style="padding:12px"><div class="row" style="justify-content:space-between;align-items:flex-start">'
+      +'<div><div style="font-family:var(--display);font-size:15px">'+pad(g.level)+' · '+esc(l?l.name:"")+'</div>'
+      +'<div class="muted small">'+esc(g.date)+' · AI: '+esc(ai?ai.name:"—")+'</div></div>'
+      +'<div style="text-align:right"><div style="font-family:var(--display);font-size:18px;color:'+(g.win?"var(--green)":"var(--red)")+'">'+g.myVP+' – '+g.aiVP+'</div>'
+      +'<div class="small" style="color:'+(g.win?"var(--green)":"var(--red)")+'">'+(g.win?"won":"lost")+'</div></div></div>'
+      +'<div class="row" style="gap:6px;margin-top:8px">'
+      +(g.goal?'<span class="tag" style="color:var(--green)">Goal</span>':'')
+      +(g.challenge?'<span class="tag" style="color:var(--gold)">Challenge</span>':'')+'</div>'
+      +(g.notes?'<p class="muted" style="margin:8px 0 0;font-size:12px">'+esc(g.notes)+'</p>':'')
+      +'<div style="margin-top:8px"><button class="btn sm" data-act="del" data-id="'+g.id+'">Delete</button></div></div>';
+  });
+  h+='</div>';
+
+  h+='<div class="sec"><h2>Data</h2><div class="row" style="gap:8px;flex-wrap:wrap">'
+    +'<button class="btn sm" data-act="export">Download backup</button>'
+    +'<button class="btn sm" data-act="importopen">Restore backup</button>'
+    +'<button class="btn sm red" data-act="reset">Reset campaign</button></div>'
+    +'<div id="importbox" style="display:none;margin-top:10px">'
+    +'<textarea id="f-import" rows="5" placeholder="Paste the contents of a backup file here"></textarea>'
+    +'<div style="margin-top:8px"><button class="btn sm gold" data-act="import">Restore</button></div></div>'
+    +'<p class="muted small" style="margin-top:10px">Everything saves automatically on this device'
+    +(mode==="local"?"":" (storage is temporary in this session — download a backup)")+'.</p></div>';
+  return h;
+}
+
+function viewRules(){
+  let h='<h1>Solo reference</h1><p class="muted">The solo rules and Village actions, condensed for the table.</p><div class="grid" style="margin-top:16px">';
+  REFERENCE.forEach((s,i)=>{
+    const on=S.acc===i;
+    h+='<div class="panel"><button class="acc" data-act="acc" data-i="'+i+'">'
+      +'<span style="color:'+(on?"var(--gold)":"var(--ink)")+'">'+s.title+'</span><span class="muted">'+(on?"−":"+")+'</span></button>';
+    if(on){
+      h+='<div style="padding:0 13px 13px">';
+      s.items.forEach(it=>h+='<div class="bul"><i></i><span>'+esc(it)+'</span></div>');
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+
+/* =========================================================
+   Render and events
+   ========================================================= */
+const TABS=[["campaign","Campaign"],["camp","Home Camp"],["games","Game Log"],["rules","Reference"]];
+let jumpTop=false;
+
+function render(){
+  const app=document.getElementById("app");
+  const y=window.scrollY;
+  let h;
+  if(S.form) h=viewForm();
+  else if(S.level!==null) h=viewLevel();
+  else if(S.tab==="campaign") h=viewCampaign();
+  else if(S.tab==="camp") h=viewCamp();
+  else if(S.tab==="games") h=viewGames();
+  else h=viewRules();
+  app.innerHTML=h;
+  document.getElementById("nav").innerHTML=TABS.map(([id,label])=>{
+    const on=S.tab===id&&!S.form&&S.level===null;
+    return '<button class="'+(on?"on":"")+'" data-go="'+id+'">'+label+'</button>';
+  }).join("");
+  window.scrollTo(0, jumpTop?0:y);
+  jumpTop=false;
+}
+
+function syncForm(){
+  if(!S.form) return;
+  const g=id=>document.getElementById(id);
+  if(g("f-my")) S.form.myVP=g("f-my").value;
+  if(g("f-ai")) S.form.aiVP=g("f-ai").value;
+  if(g("f-date")) S.form.date=g("f-date").value;
+  if(g("f-notes")) S.form.notes=g("f-notes").value;
+}
+
+function openForm(n){
+  const level=n||current()||1, l=L(level);
+  S.form={level:level,date:new Date().toISOString().slice(0,10),ai:"lookout",
+    myVP:"",aiVP:"",goal:!l.goal,challenge:false,notes:"",override:null};
+  S.level=null; jumpTop=true; render();
+}
+
+function saveGame(){
+  syncForm();
+  const f=S.form, l=L(f.level);
+  const my=parseInt(f.myVP,10), op=parseInt(f.aiVP,10);
+  const computed=!isNaN(my)&&!isNaN(op)&&my>op&&f.goal;
+  const win=f.override===null?computed:f.override;
+  S.games.push({id:Date.now(),date:f.date,level:f.level,ai:f.ai,
+    myVP:isNaN(my)?0:my,aiVP:isNaN(op)?0:op,goal:f.goal,challenge:f.challenge,win:win,notes:f.notes});
+  const prev=lv(f.level);
+  S.campaign.levels[f.level]={
+    goal: prev.goal||win,
+    challenge: prev.challenge||(win&&f.challenge&&l.act<=2)
+  };
+  S.form=null; S.tab="campaign";
+  persist(); jumpTop=true; render();
+  toast(win?"Level won. Game saved.":"Game saved.");
+}
+
+function persist(){ save(K_CAMP,S.campaign); save(K_GAMES,S.games); }
+
+document.addEventListener("click",function(ev){
+  const el=ev.target.closest("[data-go],[data-act]");
+  if(!el) return;
+  const go=el.getAttribute("data-go"), act=el.getAttribute("data-act");
+
+  if(go){
+    if(go==="level"){ S.level=parseInt(el.dataset.n,10); S.form=null; }
+    else if(go==="form"){ openForm(el.dataset.n?parseInt(el.dataset.n,10):null); return; }
+    else if(go==="back"){ S.form=null; }
+    else { S.tab=go; S.level=null; S.form=null; }
+    jumpTop=true; render(); return;
+  }
+
+  if(act==="check"){
+    const n=S.level, i=el.dataset.i;
+    S.checks[n]=S.checks[n]||{};
+    S.checks[n][i]=!S.checks[n][i]; render(); return;
+  }
+  if(act==="clearchecks"){ S.checks[S.level]={}; render(); return; }
+
+  if(act==="camp"){
+    const id=el.dataset.id, d=parseInt(el.dataset.d,10), cur=S.campaign.camp[id];
+    const next=cur+d;
+    if(next<0||next>TRACKS[id].size) return;
+    if(d>0&&free()<=0) return;
+    S.campaign.camp[id]=next; persist(); render(); return;
+  }
+
+  if(act==="ai"){ syncForm(); S.form.ai=el.dataset.id; render(); return; }
+  if(act==="goal"){ syncForm(); S.form.goal=!S.form.goal; S.form.override=null; render(); return; }
+  if(act==="ch"){ syncForm(); S.form.challenge=!S.form.challenge; render(); return; }
+  if(act==="flip"){
+    syncForm();
+    const f=S.form, my=parseInt(f.myVP,10), op=parseInt(f.aiVP,10);
+    const computed=!isNaN(my)&&!isNaN(op)&&my>op&&f.goal;
+    const win=f.override===null?computed:f.override;
+    f.override=!win; render(); return;
+  }
+  if(act==="save"){ saveGame(); return; }
+
+  if(act==="del"){
+    const id=parseInt(el.dataset.id,10);
+    S.games=S.games.filter(g=>g.id!==id); persist(); render(); return;
+  }
+  if(act==="acc"){ const i=parseInt(el.dataset.i,10); S.acc=S.acc===i?-1:i; render(); return; }
+
+  if(act==="reset"){
+    if(confirm("Erase all campaign progress and the game log?")){
+      S.campaign={levels:{},camp:{command:0,logistics:0,renown:0}};
+      S.games=[]; persist(); render(); toast("Campaign reset.");
+    }
+    return;
+  }
+  if(act==="export"){
+    const data=JSON.stringify({campaign:S.campaign,games:S.games},null,1);
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));
+    a.download="raiders-of-scythia-backup-"+new Date().toISOString().slice(0,10)+".json";
+    a.click(); URL.revokeObjectURL(a.href); toast("Backup downloaded."); return;
+  }
+  if(act==="importopen"){
+    const b=document.getElementById("importbox");
+    b.style.display=b.style.display==="none"?"block":"none"; return;
+  }
+  if(act==="import"){
+    try{
+      const d=JSON.parse(document.getElementById("f-import").value);
+      if(d.campaign) S.campaign={levels:d.campaign.levels||{},camp:Object.assign({command:0,logistics:0,renown:0},d.campaign.camp||{})};
+      if(Array.isArray(d.games)) S.games=d.games;
+      persist(); render(); toast("Backup restored.");
+    }catch(e){ toast("That file could not be read."); }
+    return;
+  }
+});
+
+document.addEventListener("change",function(ev){
+  if(ev.target.id==="f-level"&&S.form){
+    syncForm();
+    S.form.level=parseInt(ev.target.value,10);
+    const l=L(S.form.level);
+    S.form.goal=!l.goal; S.form.challenge=false; S.form.override=null;
+    render();
+  }
+});
+
+/* =========================================================
+   PWA manifest, generated in memory
+   ========================================================= */
+(function(){
+  const icon="data:image/svg+xml,"+encodeURIComponent(
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='#151A1B'/><circle cx='256' cy='256' r='120' fill='none' stroke='#D4A32C' stroke-width='36'/><rect x='236' y='60' width='40' height='90' fill='#B04A34'/></svg>");
+  const manifest={name:"Raiders of Scythia — Solo Campaign",short_name:"RoS Campaign",
+    start_url:".",display:"standalone",background_color:"#151A1B",theme_color:"#151A1B",
+    icons:[{src:icon,sizes:"512x512",type:"image/svg+xml",purpose:"any"}]};
+  try{
+    const link=document.createElement("link");
+    link.rel="manifest";
+    link.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"}));
+    document.head.appendChild(link);
+  }catch(e){}
+})();
+
+/* Boot */
+(async function(){
+  const c=await load(K_CAMP,null), g=await load(K_GAMES,null);
+  if(c) S.campaign={levels:c.levels||{},camp:Object.assign({command:0,logistics:0,renown:0},c.camp||{})};
+  if(Array.isArray(g)) S.games=g;
+  render();
+})();
+</script>
+</body>
+</html>
