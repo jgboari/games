@@ -1,0 +1,481 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Verdant — Conquistas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Petit+Formal+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDE4CE;
+  --card:#F8F3E3;
+  --ink:#123C28;
+  --ink2:#3D6B4F;
+  --line:#C9BFA2;
+  --green:#4E8C3E;
+  --green-d:#1C5A34;
+  --leaf:#7FB542;
+  --leaf-l:#A9CF5F;
+  --gold:#D0A02C;
+  --clay:#B4643E;
+  --p1:#C4166F;
+  --p2:#1E4FA0;
+  --p3:#2FB5D6;
+  --p4:#E4571E;
+  --fan: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32' viewBox='0 0 64 32'%3E%3Cg fill='none' stroke='%231C5A34' stroke-opacity='.10' stroke-width='1.4'%3E%3Cpath d='M0 32a8 8 0 0116 0M0 32a16 16 0 0132 0M0 32a24 24 0 0148 0M0 32a32 32 0 0164 0'/%3E%3Cpath d='M32 32a8 8 0 0116 0M32 32a16 16 0 0132 0M64 32a8 8 0 0116 0'/%3E%3C/g%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  background:var(--paper) var(--fan) repeat;
+  background-size:64px 32px;
+  color:var(--ink);
+  font-family:"EB Garamond",Garamond,Georgia,serif;
+  font-size:17px;line-height:1.45;
+  padding-bottom:40px;
+}
+.wrap{max-width:560px;margin:0 auto;padding:0 14px}
+
+/* ---------- cabeçalho ---------- */
+header{
+  background:var(--green-d) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32' viewBox='0 0 64 32'%3E%3Cg fill='none' stroke='%23A9CF5F' stroke-opacity='.28' stroke-width='1.4'%3E%3Cpath d='M0 32a8 8 0 0116 0M0 32a16 16 0 0132 0M0 32a24 24 0 0148 0M0 32a32 32 0 0164 0'/%3E%3Cpath d='M32 32a8 8 0 0116 0M32 32a16 16 0 0132 0'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  background-size:64px 32px;
+  color:#F4EFDD;
+  padding:18px 14px 14px;
+  text-align:center;
+  border-bottom:3px solid var(--leaf-l);
+}
+.logo{
+  font-family:"Petit Formal Script","Brush Script MT",cursive;
+  font-size:44px;line-height:.9;letter-spacing:.5px;
+  text-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+.logo sup{font-size:11px;vertical-align:super;opacity:.8;font-family:"EB Garamond",serif}
+.sub{font-variant:small-caps;letter-spacing:.14em;font-size:15px;margin-top:2px;color:#CFE6A6}
+
+/* ---------- plantas ---------- */
+.garden{display:flex;gap:10px;margin:16px 0 6px}
+.pl{
+  flex:1;background:var(--card);border:1px solid var(--line);
+  border-radius:3px;padding:10px 8px 8px;text-align:center;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.5);
+}
+.pl input.name{
+  width:100%;border:0;border-bottom:1.5px dotted var(--line);background:transparent;
+  font-family:inherit;font-size:18px;color:var(--ink);text-align:center;
+  padding:2px 0 4px;margin-bottom:6px;
+}
+.pl input.name:focus{outline:none;border-bottom-color:var(--leaf)}
+.pl svg.plant{width:100%;height:auto;display:block;touch-action:manipulation}
+.leaf-off{fill:#F8F3E3;stroke:#9DB98A;stroke-width:1}
+.leaf-on{stroke:none}
+.count{font-size:14px;color:var(--ink2);margin-top:2px}
+.count b{font-size:19px;color:var(--ink)}
+.swap{
+  margin-top:5px;font-size:12.5px;font-variant:small-caps;letter-spacing:.09em;
+  background:none;border:1px solid var(--line);border-radius:2px;color:var(--ink2);
+  padding:3px 9px;font-family:inherit;cursor:pointer;
+}
+.swap:active{background:#EDE4CE}
+
+/* ---------- abas ---------- */
+nav{display:flex;gap:6px;margin:12px 0 4px;position:sticky;top:0;z-index:5;
+  padding:8px 0 6px;background:linear-gradient(var(--paper) 78%,rgba(237,228,206,0))}
+nav button{
+  flex:1;font-family:inherit;font-size:14.5px;font-variant:small-caps;letter-spacing:.06em;
+  padding:8px 2px 6px;border:1px solid var(--green-d);border-bottom-width:3px;
+  border-radius:3px 3px 0 0;background:var(--card);color:var(--ink);cursor:pointer;line-height:1.15;
+}
+nav button .n{display:block;font-variant:normal;font-size:12px;color:var(--ink2);letter-spacing:0}
+nav button[aria-selected="true"]{background:var(--green-d);color:#F4EFDD;border-color:var(--green-d)}
+nav button[aria-selected="true"] .n{color:#CFE6A6}
+
+/* ---------- título de seção ---------- */
+h2{font-variant:small-caps;font-size:24px;font-weight:600;margin:14px 0 2px;letter-spacing:.02em}
+.rule{height:0;border-top:2px solid var(--green-d);border-bottom:1px solid var(--green-d);
+  padding-top:2px;margin-bottom:8px}
+.intro{font-size:15px;color:var(--ink2);margin:0 0 10px;line-height:1.4}
+
+/* ---------- tabela ---------- */
+.head{
+  display:flex;align-items:flex-end;gap:8px;position:sticky;top:58px;z-index:4;
+  background:var(--paper);padding:4px 0 3px;border-bottom:1px solid var(--line);
+}
+.head .sp{flex:1}
+.head .who{width:44px;text-align:center;font-size:12.5px;color:var(--ink2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ul.rows{list-style:none;margin:0;padding:0}
+ul.rows li{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 8px;border-bottom:1px dotted var(--line);
+  background:var(--card);
+}
+ul.rows li:nth-child(odd){background:#FCF8EC}
+ul.rows li.done2{background:#EEF5DF}
+.body{flex:1;min-width:0}
+.top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.num{
+  font-size:14px;color:#7A6B4A;min-width:20px;
+}
+.title{font-size:16.5px;line-height:1.25}
+.goals{margin:4px 0 0;padding-left:15px;font-size:14.5px;color:var(--ink2);line-height:1.3}
+.goals li{margin:1px 0}
+.chips{display:flex;gap:3px}
+.chip{
+  width:19px;height:25px;border-radius:2px;display:grid;place-items:center;
+  font-size:13px;font-weight:600;color:#F4EFDD;border:1px solid rgba(0,0,0,.15);
+}
+.chip.p{background:#8FBF6B}.chip.i{background:#3E8C4E}.chip.s{background:#194F31}
+.pts{
+  margin-left:auto;background:var(--gold);color:#4A3306;font-size:13.5px;font-weight:600;
+  border-radius:11px;padding:1px 9px;border:1px solid #A67C15;white-space:nowrap;
+}
+.tk{
+  width:44px;height:44px;flex:none;border:0;background:none;padding:0;cursor:pointer;
+  display:grid;place-items:center;border-radius:50%;
+}
+.tk svg{width:27px;height:27px}
+.tk .off{fill:none;stroke:currentColor;stroke-width:1.6;opacity:.32}
+.tk .on{fill:currentColor;stroke:none}
+.tk:active{background:rgba(0,0,0,.06)}
+.tk:focus-visible{outline:2px solid var(--green);outline-offset:-3px}
+
+/* ---------- rodapé ---------- */
+footer{margin:22px 0 0;text-align:center;font-size:13.5px;color:var(--ink2)}
+footer button{
+  font-family:inherit;font-size:13.5px;font-variant:small-caps;letter-spacing:.08em;
+  background:none;border:1px solid var(--line);border-radius:2px;color:var(--ink2);
+  padding:5px 12px;cursor:pointer;
+}
+footer button.warn{border-color:var(--clay);color:var(--clay)}
+#status{font-size:13.5px;color:var(--ink2);margin:6px 0 10px}
+#status.ok{color:var(--green-d)}
+#status.bad{color:var(--clay)}
+#bk{margin:16px auto 0;max-width:420px;text-align:left}
+#bk summary{font-size:13.5px;font-variant:small-caps;letter-spacing:.08em;cursor:pointer;color:var(--ink2)}
+.bkhelp{font-size:13.5px;line-height:1.35;margin:6px 0}
+#bkbox{width:100%;font-family:ui-monospace,Menlo,monospace;font-size:11px;
+  border:1px solid var(--line);border-radius:2px;background:var(--card);color:var(--ink2);padding:6px;resize:vertical}
+.bkrow{display:flex;gap:8px;margin-top:6px}
+.bkrow button{flex:1}
+</style>
+
+<header>
+  <div class="logo">Verdant<sup>™</sup></div>
+  <div class="sub">Conquistas</div>
+</header>
+
+<div class="wrap">
+  <section class="garden" id="garden"></section>
+
+  <nav id="tabs" role="tablist"></nav>
+  <section id="panel"></section>
+
+  <footer>
+    <p id="hint">Cada folha preenchida vale uma conquista. Toque na figura ao lado de cada linha para marcar.</p>
+    <p id="status">Carregando</p>
+    <button id="reset">Limpar conquistas</button>
+    <details id="bk">
+      <summary>Backup manual</summary>
+      <p class="bkhelp">Gere o código, guarde onde quiser e cole aqui para restaurar em outro aparelho ou se o salvamento falhar.</p>
+      <textarea id="bkbox" rows="3" spellcheck="false" placeholder="O código do backup aparece aqui"></textarea>
+      <div class="bkrow">
+        <button id="bkgen">Gerar código</button>
+        <button id="bkput">Restaurar</button>
+      </div>
+    </details>
+  </footer>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="sh0" viewBox="0 0 24 24"><path d="M12 2.5 22 9.8l-3.8 11.7H5.8L2 9.8Z"/></symbol>
+  <symbol id="sh1" viewBox="0 0 24 24"><path d="M12 2 15 9.2l7.7.5-5.9 5 1.9 7.5L12 18.1 5.3 22.2l1.9-7.5-5.9-5 7.7-.5Z"/></symbol>
+  <symbol id="sh2" viewBox="0 0 24 24"><path d="M12 1.8 19 12l-7 10.2L5 12Z"/></symbol>
+  <symbol id="sh3" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/></symbol>
+</defs></svg>
+
+<script>
+/* ======================= dados do manual ======================= */
+const CEN = [
+  [1,"A","A","B",70,[]],
+  [2,"B","B","C",70,[]],
+  [3,"E","D","F",75,[]],
+  [4,"J","I","B",75,["Conclua todas as plantas"]],
+  [5,"G","A","C",75,["Não pode usar Itens de Colher de Jardinagem"]],
+  [6,"I","C","E",80,["Conclua 1 planta de cada um dos 5 tipos"]],
+  [7,"B","E","D",80,["Coloque 8 itens únicos em sua casa"]],
+  [8,"S","B","F",85,["Todas as condições de iluminação devem combinar","Itens colocados devem combinar com o tipo da sala"]],
+  [9,"G","A","B",85,["Mesmo tipo de planta/sala em cada coluna","Pontue 5+ por verdores extras"]],
+  [10,"D","S","A",90,["Tenha apenas 3 tipos diferentes de plantas","Pontue 10+ por vasos"]],
+  [11,"C","I","L",90,["Não tenha animais de estimação","Termine a partida com 3+ Fichas de Polegar Verde"]],
+  [12,"A","J","G",95,["Tenha 4 plantas de um tipo qualquer","Pontue 35+ por plantas"]],
+  [13,"E","F","A",95,["Todas as condições de iluminação devem combinar","Todas as salas devem ter um item"]],
+  [14,"I","C","J",95,["Não pode usar Itens de Regador","Pontue 20+ por salas"]],
+  [15,"F","D","I",100,["Seja o Colecionador e o Decorador","Pontue 40+ por plantas"]]
+];
+const NOR = ["Pontue 70+.","Pontue 80+.","Pontue 90+.","Pontue 100+.",
+"Tenha 5 plantas de um único tipo.","Tenha 5 salas de um único tipo.","Conclua 8 plantas.",
+"Colete 8 itens únicos.","Pontue 30+ por plantas concluídas.","Pontue 40+ por plantas concluídas.",
+"Pontue 20+ por salas.","Pontue 25+ por salas.","Todos os itens combinam com suas salas.",
+"Pontue 9+ por Vasos.","Pontue 12+ por Vasos.","Pontue 10+ por Cartas de Objetivo.",
+"Pontue 15+ por Cartas de Objetivo.","Tenha 10+ Marcadores de Verdor extras.",
+"Seja o Colecionador e o Decorador.","Vença por 10+ pontos.","Vença por 15+ pontos.",
+"Colete todos os 4 animais de estimação.","Colete todos os 5 móveis.","Pontue 8 por uma única sala.",
+"Termine a partida com 5 Fichas de Polegar Verde."];
+const MOD = ["Todas as condições de iluminação devem combinar ao posicionar cartas.",
+"São necessárias três Fichas de Polegar Verde para realizar uma Ação de Polegar Verde.",
+"No começo, cada jogador compra uma Carta de Sala — este tipo de sala não pode ser escolhido pelo jogador.",
+"Jogue com 2 conjuntos de Cartas de Objetivo. No fim da partida, os jogadores escolhem qual das 2 cartas pontuarão.",
+"Jogue com Cartas de Objetivo individuais secretas: entregue um conjunto para cada jogador no começo da partida.",
+"Jogue sem a restrição da grade de 5 x 3. Os jogadores podem criar qualquer formato com suas 15 cartas.",
+"Jogue sem o Estoque de Item. As fichas devem ser jogadas no turno em que foram escolhidas, ou são descartadas.",
+"Fichas de Fertilizante não podem ser jogadas. Ao invés disso, descarte-as para ganhar 3 Fichas de Polegar Verde.",
+"Você pode gastar 5 Fichas de Polegar Verde para realizar qualquer ação de Nutrição.",
+"Jogue com um Mercado de apenas 3 colunas."];
+
+const MODES = {
+  cen:{label:"Cenários", total:CEN.length,
+       intro:"Cada cenário define as Cartas de Objetivo, a pontuação mínima e as metas. Jogando solo, siga do 1 ao 15 — a dificuldade cresce."},
+  nor:{label:"Partida normal", total:NOR.length,
+       intro:"Prepare uma partida com as regras normais. Cada jogador marca no máximo uma conquista por partida."},
+  mod:{label:"Modificações", total:MOD.length,
+       intro:"Jogue com as regras normais mais uma modificação da lista. Quem participar da partida marca a modificação usada."}
+};
+const TOTAL = CEN.length + NOR.length + MOD.length;
+const COLORS = ["var(--p1)","var(--p2)","var(--p3)","var(--p4)"];
+const KEY = "verdant_conquistas_v1";
+
+/* ======================= estado ======================= */
+let S = {names:["Jogador 1","Jogador 2"], shapes:[0,1],
+         done:{cen:[[],[]], nor:[[],[]], mod:[[],[]]}};
+let sets = {};
+let tab = "cen";
+
+function toSets(){
+  sets = {};
+  for(const m in MODES) sets[m] = [new Set(S.done[m][0]), new Set(S.done[m][1])];
+}
+function fromSets(){
+  for(const m in MODES) S.done[m] = [[...sets[m][0]], [...sets[m][1]]];
+}
+function scored(p){ let n=0; for(const m in MODES) n += sets[m][p].size; return n; }
+
+/* ======================= persistência ======================= */
+const mem = {v:null};
+const store = (typeof window !== "undefined" && window.storage) ? window.storage : null;
+let confirmed = false, writing = false, again = false;
+
+async function loadState(){
+  if(!store) return mem.v ? JSON.parse(mem.v) : null;
+  try{
+    const r = await store.get(KEY, false);
+    if(r && r.value){ confirmed = true; return JSON.parse(r.value); }
+  }catch(e){ /* nada guardado ainda, ou leitura falhou */ }
+  return null;
+}
+
+let t=null;
+function save(){ clearTimeout(t); setStatus("…", "Salvando"); t = setTimeout(write, 250); }
+
+async function write(){
+  if(writing){ again = true; return; }
+  writing = true;
+  fromSets();
+  const txt = JSON.stringify(S);
+  mem.v = txt;
+  if(!store){ setStatus("!", "Sem salvamento neste modo de visualização — use o backup abaixo"); writing=false; return; }
+  try{
+    await store.set(KEY, txt, false);
+    if(!confirmed){
+      const r = await store.get(KEY, false);
+      confirmed = !!(r && r.value);
+    }
+    setStatus(confirmed ? "✓" : "!", confirmed ? "Salvo às " + hhmm() : "Gravado, mas sem confirmação de leitura");
+  }catch(e){
+    setStatus("!", "Não deu para salvar: " + ((e && e.message) || "erro desconhecido"));
+  }
+  writing = false;
+  if(again){ again = false; write(); }
+}
+
+function hhmm(){ const d=new Date(); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+function setStatus(mark, msg){
+  const el = document.getElementById("status"); if(!el) return;
+  el.textContent = mark + " " + msg;
+  el.className = mark === "✓" ? "ok" : (mark === "!" ? "bad" : "");
+}
+addEventListener("visibilitychange", ()=>{ if(document.visibilityState === "hidden"){ clearTimeout(t); write(); } });
+
+/* ======================= planta de conquistas ======================= */
+const LEAVES = (()=>{
+  const out=[], stemX = y => 100 + 6*Math.sin((268-y)/46);
+  let made = 0;
+  const branches = 10, per = Math.ceil(TOTAL/branches);
+  for(let b=0; b<branches && made<TOTAL; b++){
+    const y0 = 248 - b*18.5, x0 = stemX(y0), side = b%2 ? -1 : 1;
+    const cx = x0 + side*(30+(b%3)*3), cy = y0 - 6;
+    const ex = x0 + side*(44+(b%4)*4), ey = y0 - 44 - (b%3)*3;
+    const q = t => ({x:(1-t)*(1-t)*x0 + 2*(1-t)*t*cx + t*t*ex,
+                     y:(1-t)*(1-t)*y0 + 2*(1-t)*t*cy + t*t*ey,
+                     a:Math.atan2(2*(1-t)*(cy-y0)+2*t*(ey-cy), 2*(1-t)*(cx-x0)+2*t*(ex-cx))*180/Math.PI});
+    out.push({branch:`M${x0.toFixed(1)} ${y0.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`});
+    const ts=[.34,.52,.68,.84,1];
+    for(let j=0;j<per && made<TOTAL;j++){
+      const p = q(ts[j%5]), sgn = j===4?0:(j%2?1:-1);
+      out.push({x:p.x, y:p.y, rot:p.a + sgn*58, leaf:true, off:sgn});
+      made++;
+    }
+  }
+  return out;
+})();
+
+function plant(p){
+  const col = COLORS[S.shapes[p]];
+  let d="", n=0;
+  const parts=[];
+  for(const it of LEAVES){
+    if(it.branch){ parts.push(`<path d="${it.branch}" fill="none" stroke="#2E6B3C" stroke-width="1.6" stroke-linecap="round"/>`); continue; }
+    const ox = it.off*3.5, oy = -Math.abs(it.off)*1.5;
+    parts.push(`<ellipse class="lf" data-i="${n}" cx="${(it.x+ox).toFixed(1)}" cy="${(it.y+oy).toFixed(1)}" rx="4.4" ry="7.2"
+      transform="rotate(${it.rot.toFixed(1)} ${(it.x+ox).toFixed(1)} ${(it.y+oy).toFixed(1)})"/>`);
+    n++;
+  }
+  return `<svg class="plant" viewBox="0 0 200 300" role="img" aria-label="Planta de conquistas">
+    <path d="M100 268 C93 220 107 160 100 60" fill="none" stroke="#2E6B3C" stroke-width="3.4" stroke-linecap="round"/>
+    ${parts.join("")}
+    <path d="M62 244h76l-3 10H65Z" fill="#9E5232"/>
+    <path d="M66 256h68l-8 36H74Z" fill="var(--clay)"/>
+    <path d="M66 256h68l-8 36H74Z" fill="none" stroke="#8E4A2C" stroke-width="1"/>
+    <g transform="translate(100 273) scale(.95)" fill="${col}" stroke="#F3EAD8" stroke-width=".8">
+      <use href="#sh${S.shapes[p]}" x="-12" y="-12" width="24" height="24"/>
+    </g>
+  </svg>`;
+}
+
+function drawGarden(){
+  const g = document.getElementById("garden");
+  g.innerHTML = [0,1].map(p=>`<div class="pl">
+      <input class="name" data-p="${p}" value="${S.names[p].replace(/"/g,"&quot;")}" maxlength="14" aria-label="Nome do jogador ${p+1}">
+      ${plant(p)}
+      <div class="count"><b id="c${p}">0</b> / ${TOTAL} folhas</div>
+      <button class="swap" data-p="${p}">trocar figura</button>
+    </div>`).join("");
+  paintLeaves();
+}
+function paintLeaves(){
+  [0,1].forEach(p=>{
+    const n = scored(p), col = COLORS[S.shapes[p]];
+    const svg = document.querySelectorAll(".pl")[p];
+    svg.querySelectorAll(".lf").forEach(el=>{
+      const on = +el.dataset.i < n;
+      el.setAttribute("class", on ? "lf leaf-on" : "lf leaf-off");
+      if(on) el.setAttribute("fill", +el.dataset.i % 3 === 0 ? "var(--leaf-l)" : "var(--leaf)");
+      else el.removeAttribute("fill");
+    });
+    document.getElementById("c"+p).textContent = n;
+    svg.querySelector("use").parentNode.setAttribute("fill", col);
+  });
+}
+
+/* ======================= abas e listas ======================= */
+function drawTabs(){
+  document.getElementById("tabs").innerHTML = Object.entries(MODES).map(([k,m])=>{
+    const a = sets[k][0].size, b = sets[k][1].size;
+    return `<button role="tab" data-m="${k}" aria-selected="${k===tab}">${m.label}<span class="n">${a} · ${b} de ${m.total}</span></button>`;
+  }).join("");
+}
+function token(m,id,p){
+  const on = sets[m][p].has(id);
+  return `<button class="tk" data-m="${m}" data-id="${id}" data-p="${p}"
+    style="color:${COLORS[S.shapes[p]]}" aria-pressed="${on}"
+    aria-label="${S.names[p]}: conquista ${id}"><svg viewBox="0 0 24 24"><use href="#sh${S.shapes[p]}" class="${on?"on":"off"}"/></svg></button>`;
+}
+function rowsFor(m){
+  if(m==="cen") return CEN.map(c=>({id:c[0], html:
+    `<div class="top"><span class="num">${c[0]}</span>
+       <span class="chips"><span class="chip p">${c[1]}</span><span class="chip i">${c[2]}</span><span class="chip s">${c[3]}</span></span>
+       <span class="pts">${c[4]}+ pts</span></div>
+     ${c[5].length?`<ul class="goals">${c[5].map(g=>`<li>${g}</li>`).join("")}</ul>`:""}`}));
+  const arr = m==="nor"?NOR:MOD;
+  return arr.map((s,i)=>({id:i+1, html:`<div class="top"><span class="num">${i+1}</span><span class="title">${s}</span></div>`}));
+}
+function drawPanel(){
+  const m = MODES[tab];
+  const rows = rowsFor(tab).map(r=>{
+    const both = sets[tab][0].has(r.id) && sets[tab][1].has(r.id);
+    return `<li class="${both?"done2":""}"><div class="body">${r.html}</div>${token(tab,r.id,0)}${token(tab,r.id,1)}</li>`;
+  }).join("");
+  document.getElementById("panel").innerHTML =
+    `<h2>${m.label}</h2><div class="rule"></div><p class="intro">${m.intro}</p>
+     <div class="head"><span class="sp"></span>
+       <span class="who">${S.names[0]}</span><span class="who">${S.names[1]}</span></div>
+     <ul class="rows">${rows}</ul>`;
+}
+
+/* ======================= eventos ======================= */
+document.addEventListener("click", e=>{
+  const tk = e.target.closest(".tk");
+  if(tk){
+    const {m,p} = tk.dataset, id = +tk.dataset.id, s = sets[m][+p];
+    s.has(id) ? s.delete(id) : s.add(id);
+    drawPanel(); paintLeaves(); drawTabs(); save(); return;
+  }
+  const tb = e.target.closest("nav button");
+  if(tb){ tab = tb.dataset.m; drawTabs(); drawPanel(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+  const sw = e.target.closest(".swap");
+  if(sw){
+    const p = +sw.dataset.p, other = S.shapes[1-p];
+    let s = S.shapes[p];
+    do{ s = (s+1)%4; }while(s===other);
+    S.shapes[p]=s; drawGarden(); drawPanel(); save(); return;
+  }
+  if(e.target.id === "bkgen"){
+    fromSets();
+    const box = document.getElementById("bkbox");
+    box.value = JSON.stringify(S); box.focus(); box.select();
+    if(navigator.clipboard) navigator.clipboard.writeText(box.value).catch(()=>{});
+    return;
+  }
+  if(e.target.id === "bkput"){
+    const box = document.getElementById("bkbox");
+    try{
+      const d = JSON.parse(box.value);
+      if(!d || !d.done) throw 0;
+      S = Object.assign({names:["Jogador 1","Jogador 2"], shapes:[0,1]}, d);
+      toSets(); drawGarden(); drawTabs(); drawPanel(); save();
+      setStatus("✓","Backup restaurado");
+    }catch(err){ setStatus("!","Código de backup inválido"); }
+    return;
+  }
+  const rs = e.target.closest("#reset");
+  if(rs){
+    if(rs.dataset.armed){
+      toSets0(); drawGarden(); drawTabs(); drawPanel(); save();
+      rs.textContent="Limpar conquistas"; rs.classList.remove("warn"); delete rs.dataset.armed;
+      document.getElementById("hint").textContent="Conquistas zeradas. Os nomes e as figuras continuam salvos.";
+    }else{
+      rs.dataset.armed="1"; rs.textContent="Toque de novo para apagar"; rs.classList.add("warn");
+      setTimeout(()=>{ if(rs.dataset.armed){ rs.textContent="Limpar conquistas"; rs.classList.remove("warn"); delete rs.dataset.armed; } },4000);
+    }
+  }
+});
+function toSets0(){ for(const m in MODES) sets[m]=[new Set(),new Set()]; }
+
+document.addEventListener("input", e=>{
+  if(e.target.classList.contains("name")){
+    S.names[+e.target.dataset.p] = e.target.value || ("Jogador "+(+e.target.dataset.p+1));
+    document.querySelectorAll(".head .who")[+e.target.dataset.p].textContent = S.names[+e.target.dataset.p];
+    save();
+  }
+});
+
+/* ======================= início ======================= */
+(async ()=>{
+  const saved = await loadState();
+  if(saved){ S = Object.assign(S, saved); }
+  toSets();
+  drawGarden(); drawTabs(); drawPanel();
+  if(!store) setStatus("!","Sem salvamento neste modo de visualização — use o backup abaixo");
+  else if(saved) setStatus("✓","Progresso recuperado");
+  else setStatus("✓","Cada marcação é salva automaticamente");
+})();
+</script>
